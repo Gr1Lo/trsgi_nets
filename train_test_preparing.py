@@ -133,3 +133,21 @@ def sta_augment(trsgi_values, pcs):
   trsgi_copy= trsgi_values.tolist() * 10
 
   return trsgi_copy, pcs_copy
+
+def split_regr(trsgi_values, pcs):
+    trsgi_values = np.asarray(trsgi_values)
+    trsgi_scaled = normalize(trsgi_values, axis = 0)
+
+    # разбивка для регрессионной задачи с ненормализованными trsgi
+    train_trsgi, train_labels, test_trsgi, test_labels = train_and_test(trsgi_values, pcs[:109])
+    # разбивка для регрессионной задачи с нормализованными trsgi
+    train_trsgi_norm, train_labels_norm, test_trsgi_norm, test_labels_norm = train_and_test(trsgi_scaled, pcs[:109])
+
+def split_class(trsgi_values, kmeans10):
+    trsgi_values = np.asarray(trsgi_values)
+    trsgi_scaled = normalize(trsgi_values, axis = 0)
+
+    # разбивка для классификационной задачи с ненормализованными trsgi (10 классов)
+    train_trsgi10, train_labels10, test_trsgi10, test_labels10 = train_and_test(trsgi_values, kmeans10.labels_[:109])
+    # разбивка для классификационной задачи с нормализованными trsgi (10 классов)
+    train_trsgi_norm10, train_labels_norm10, test_trsgi_norm10, test_labels_norm10 = train_and_test(trsgi_scaled, kmeans10.labels_[:109])

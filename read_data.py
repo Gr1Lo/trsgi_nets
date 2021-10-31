@@ -31,7 +31,7 @@ def r_netCDF(f_path, min_lon = -145, min_lat = 14, max_lon = -52, max_lat = 71):
     Формирование таблицы по годам из netCDF с индексами scpdsi
     '''
 
-    ds = xr.open_dataset("test.nc")["scpdsi"]
+    ds = xr.open_dataset(f_path)["scpdsi"]
 
     #Выбор территории анализа
     mask_lon = (ds.longitude >= min_lon) & (ds.longitude <= max_lon)

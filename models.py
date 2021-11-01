@@ -389,7 +389,7 @@ def train_model(df, list_t, li_m, type_m = 'regr', useEOF = 0):
         
       score = model.evaluate(te_t, te_l, verbose=2)
       print(score)
-      df_class = df_class.append({'Name': stri, 
+      df = df.append({'Name': stri, 
                                     'params': hystory.params, 
                                     'loss': hystory.history['loss'][-1], 
                                     'accuracy': hystory.history['accuracy'][-1], 
@@ -398,7 +398,7 @@ def train_model(df, list_t, li_m, type_m = 'regr', useEOF = 0):
                                     'test_loss': score[0], 
                                     'test_accuracy': score[1]}, ignore_index=True)
 
-      return df_class, model
+      return df, model
 
 
     else:
@@ -429,10 +429,10 @@ def train_model(df, list_t, li_m, type_m = 'regr', useEOF = 0):
         
       score = model.evaluate(te_t, te_l, verbose=2)
       print(score)
-      df_regr = df_regr.append({'Name': stri, 
+      df = df.append({'Name': stri, 
                               'params': hystory.params, 
                               'loss': hystory.history['loss'][-1],
                               'val_loss': hystory.history['val_loss'][-1], 
                               'test_loss': score}, ignore_index=True)
 
-      return df_regr, model
+      return df, model

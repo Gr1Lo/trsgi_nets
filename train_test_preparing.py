@@ -29,7 +29,6 @@ def train_and_test5(trsgi, labels, start_p):
   trsgi - значения предикторов,
   labels - предсказываемые значения
   start_p - индекс года, с которого начинается тестовая пятилетка
-
   Схема пятилеток:
   1) Тестовая пятилетка (tes) --------------- 2) Первая тренировочная пятилетка (tr0)
             |                                              |
@@ -134,20 +133,50 @@ def sta_augment(trsgi_values, pcs):
 
   return trsgi_copy, pcs_copy
 
-def split_regr(trsgi_values, pcs):
+def sta_split(trsgi_values, pcs_or_kmeans, use_norm = True, type_op = 'regr', use5 = None, use_aug = False):
+    '''
+    Запуск разделения выборки на тренировочную и тестовую
+    '''
+
     trsgi_values = np.asarray(trsgi_values)
-    trsgi_scaled = normalize(trsgi_values, axis = 0)
+    
+    if use_norm:
+      trsgi_values = normalize(trsgi_values, axis = 0)
 
-    # разбивка для регрессионной задачи с ненормализованными trsgi
-    train_trsgi, train_labels, test_trsgi, test_labels = train_and_test(trsgi_values, pcs[:109])
-    # разбивка для регрессионной задачи с нормализованными trsgi
-    train_trsgi_norm, train_labels_norm, test_trsgi_norm, test_labels_norm = train_and_test(trsgi_scaled, pcs[:109])
+    if use5 == None:
+      if type_op == 'regr':
+        # разбивка для регрессионной задачи
+        train_trsgi, train_labels, test_trsgi, test_labels = train_and_test(trsgi_values, pcs_or_kmeans[:109], start_p)
+        if use_aug:
+          train_trsgi, train_labels = sta_augment(trsgi_values, pcs)
 
-def split_class(trsgi_values, kmeans10):
-    trsgi_values = np.asarray(trsgi_values)
-    trsgi_scaled = normalize(trsgi_values, axis = 0)
+      if type_op == 'class':
+        # разбивка для классификационной задачи
+        train_trsgi, train_labels, test_trsgi, test_labels = train_and_test(trsgi_values, pcs_or_kmeans.labels_[:109], start_p)
 
-    # разбивка для классификационной задачи с ненормализованными trsgi (10 классов)
-    train_trsgi10, train_labels10, test_trsgi10, test_labels10 = train_and_test(trsgi_values, kmeans10.labels_[:109])
-    # разбивка для классификационной задачи с нормализованными trsgi (10 классов)
-    train_trsgi_norm10, train_labels_norm10, test_trsgi_norm10, test_labels_norm10 = train_and_test(trsgi_scaled, kmeans10.labels_[:109])
+      return train_trsgi, train_labels, test_trsgi, test_labels
+
+    else:
+      if type_op == 'regr':
+        # разбивка для регрессионной задачи
+        train_trsgi, train_labels, val_labels, val_trsgi, test_trsgi, test_labels, val_rate = train_and_test5(trsgi_values, pcs_or_kmeans[:109], start_p)
+        if use_aug:
+          train_trsgi, train_labels = sta_augment(train_trsgi, train_labels)
+          val_trsgi, val_labels = sta_augment(val_trsgi, val_labels)
+          train_trsgi = np.concatenate((train_trsgi, val_trsgi))
+          train_labels = pd.concat([train_labels, val_labels])
+        else:
+          train_trsgi = np.concatenate((train_trsgi, val_trsgi))
+          train_labels = np.concatenate((val_trsgi, val_labels))
+
+      if type_op == 'class':
+        # разбивка для классификационной задачи
+        train_trsgi, train_labels, val_labels, val_trsgi, test_trsgi, test_labels, val_rate = train_and_test5(trsgi_values, pcs_or_kmeans.labels_[:109], start_p)
+        train_trsgi = np.concatenate((train_trsgi, val_trsgi))
+        train_labels = np.concatenate((train_labels, val_labels))
+
+      return train_trsgi, train_labels, test_trsgi, test_labels, val_rate
+
+
+
+

@@ -256,7 +256,7 @@ def simp_net_classification(trsgi_values, clust, ttl, model, use5 = None):
 
 
 
-    if use5 == None:
+    if use5 == None or use5 == 1:
       #shuffle=True
       trsgi_values, all_arr = shuffle(trsgi_values, all_arr)
       history = model.fit(trsgi_values,
@@ -314,7 +314,7 @@ def simp_net_regression(trsgi_values, clust, ttl, eofs, model, use5 = None):
                   loss='mean_squared_error')
 
 
-    if use5 == None:
+    if use5 == None or use5 == 1:
       #shuffle=True
       trsgi_values, all_arr = shuffle(trsgi_values, all_arr)
       history = model.fit(trsgi_values,

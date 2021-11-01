@@ -6,6 +6,7 @@ import skimage.measure
 import pandas as pd
 import tensorflow as tf
 from matplotlib import pyplot as plt
+from sklearn.utils import shuffle
 
 def get_model_nofrozen_classification(n_inputs, n_classes, use_drop = False):
   '''
@@ -272,7 +273,7 @@ def simp_net_classification(trsgi_values, clust, ttl, model, use5 = None):
       #shuffle=False
       history = model.fit(trsgi_values,
                           all_arr,
-                          verbose=2,
+                          verbose=0,
                           epochs=200,
                           batch_size = 10,
                           shuffle=False,
@@ -330,7 +331,7 @@ def simp_net_regression(trsgi_values, clust, ttl, eofs, model, use5 = None):
       #shuffle=False
       history = model.fit(trsgi_values,
                           all_arr,
-                          verbose=2,
+                          verbose=0,
                           epochs=200,
                           batch_size = 10,
                           shuffle=False,

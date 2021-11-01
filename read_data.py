@@ -52,4 +52,4 @@ def r_netCDF(f_path, min_lon = -145, min_lat = 14, max_lon = -52, max_lat = 71):
     mean_df = mean_df[['time', 'latitude', 'longitude', 'scpdsi']]
     df_data = get_time_space(mean_df, time_dim = "time", lumped_space_dims = ["latitude","longitude"])
 
-    return df_data
+    return df_data, ds_n

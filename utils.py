@@ -92,7 +92,7 @@ def read_pickle(f_path):
         df_test = pickle.load(f)
         return df_test
 
-def eof_an(df_clim_index, n = 10):
+def eof_an(df_clim_index, ds_n, n = 10):
 
     '''
     EOF-анализ

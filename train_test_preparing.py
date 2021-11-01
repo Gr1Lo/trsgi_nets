@@ -158,6 +158,8 @@ def sta_split(trsgi_values, pcs_or_kmeans, use_norm = True, type_op = 'regr', us
         val_rate = 1
         if use_aug:
           train_trsgi, train_labels = sta_augment(train_trsgi, train_labels)
+          train_trsgi = np.array(train_trsgi)
+          train_labels = np.array(train_labels)
 
       if type_op == 'class':
         # разбивка для классификационной задачи

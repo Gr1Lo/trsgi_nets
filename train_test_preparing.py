@@ -154,20 +154,20 @@ def sta_split(trsgi_values, pcs_or_kmeans, use_norm = True, type_op = 'regr', us
     if use5 == None:
       if type_op == 'regr':
         # разбивка для регрессионной задачи
-        train_trsgi, train_labels, test_trsgi, test_labels = train_and_test(trsgi_values, pcs_or_kmeans[:109], start_p)
+        train_trsgi, train_labels, test_trsgi, test_labels = train_and_test(trsgi_values, pcs_or_kmeans[:109])
         if use_aug:
           train_trsgi, train_labels = sta_augment(trsgi_values, pcs)
 
       if type_op == 'class':
         # разбивка для классификационной задачи
-        train_trsgi, train_labels, test_trsgi, test_labels = train_and_test(trsgi_values, pcs_or_kmeans.labels_[:109], start_p)
+        train_trsgi, train_labels, test_trsgi, test_labels = train_and_test(trsgi_values, pcs_or_kmeans.labels_[:109])
 
       return train_trsgi, train_labels, test_trsgi, test_labels
 
     else:
       if type_op == 'regr':
         # разбивка для регрессионной задачи
-        train_trsgi, train_labels, val_labels, val_trsgi, test_trsgi, test_labels, val_rate = train_and_test5(trsgi_values, pcs_or_kmeans[:109], start_p)
+        train_trsgi, train_labels, val_labels, val_trsgi, test_trsgi, test_labels, val_rate = train_and_test5(trsgi_values, pcs_or_kmeans[:109], use5)
         if use_aug:
           train_trsgi, train_labels = sta_augment(train_trsgi, train_labels)
           val_trsgi, val_labels = sta_augment(val_trsgi, val_labels)
@@ -179,7 +179,7 @@ def sta_split(trsgi_values, pcs_or_kmeans, use_norm = True, type_op = 'regr', us
 
       if type_op == 'class':
         # разбивка для классификационной задачи
-        train_trsgi, train_labels, val_labels, val_trsgi, test_trsgi, test_labels, val_rate = train_and_test5(trsgi_values, pcs_or_kmeans.labels_[:109], start_p)
+        train_trsgi, train_labels, val_labels, val_trsgi, test_trsgi, test_labels, val_rate = train_and_test5(trsgi_values, pcs_or_kmeans.labels_[:109], use5)
         train_trsgi = np.concatenate((train_trsgi, val_trsgi))
         train_labels = np.concatenate((train_labels, val_labels))
 

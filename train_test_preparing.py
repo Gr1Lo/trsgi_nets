@@ -175,7 +175,7 @@ def sta_split(trsgi_values, pcs_or_kmeans, use_norm = True, type_op = 'regr', us
           train_labels = pd.concat([train_labels, val_labels])
         else:
           train_trsgi = np.concatenate((train_trsgi, val_trsgi))
-          train_labels = np.concatenate((val_trsgi, val_labels))
+          train_labels = np.concatenate((train_labels, val_labels))
 
       if type_op == 'class':
         # разбивка для классификационной задачи

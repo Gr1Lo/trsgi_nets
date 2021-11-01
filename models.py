@@ -114,10 +114,10 @@ def get_model_frozen_regression(n_inputs, n_outputs, eofs, use_drop = False, pri
 
       x = te_ar.ravel()
       x = x[~np.isnan(x)]
-      print(x)
+      #print(x)
       fr_weights.append(x)
-      plt.imshow(te_ar, interpolation='none')
-      plt.show()
+      #plt.imshow(te_ar, interpolation='none')
+      #plt.show()
 
     fr_weights = np.transpose(fr_weights)
 
@@ -197,10 +197,10 @@ def get_model_frozen_classification(n_inputs, eofs, use_drop = False, primEOF = 
 
       x = te_ar.ravel()
       x = x[~np.isnan(x)]
-      print(x)
+      #print(x)
       fr_weights.append(x)
-      plt.imshow(te_ar, interpolation='none')
-      plt.show()
+      #plt.imshow(te_ar, interpolation='none')
+      #plt.show()
 
     fr_weights = np.transpose(fr_weights)
 

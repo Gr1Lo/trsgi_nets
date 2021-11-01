@@ -349,11 +349,13 @@ def simp_net_regression(trsgi_values, clust, ttl, eofs, model, use5 = None):
   
   
   
-def train_model(df, list_t, post_list, li_m, type_m = 'regr', useEOF = 0):
+def train_model(eofs, df, list_t, post_list, li_m, type_m = 'regr', useEOF = 0):
     '''
     Запуск тренировки моделей
+    eofs - набор значений двумерных EOF
     df - таблица с результатами
     list_t - список переменных с данными для обучения
+    post_list - список постфиксов имен для переменных
     li_m - тип сети (регрессия или классификация)
     useEOF - использование EOF на выходных слоях:
       0 - не использовать

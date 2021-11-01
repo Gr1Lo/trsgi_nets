@@ -349,7 +349,7 @@ def simp_net_regression(trsgi_values, clust, ttl, eofs, model, use5 = None):
   
   
   
-def train_model(df, list_t, li_m, type_m = 'regr', useEOF = 0):
+def train_model(df, list_t, post_list, li_m, type_m = 'regr', useEOF = 0):
     '''
     Запуск тренировки моделей
     df - таблица с результатами
@@ -364,7 +364,7 @@ def train_model(df, list_t, li_m, type_m = 'regr', useEOF = 0):
     if type_m == 'class':
       tr_t, tr_l, te_t, te_l, v_r = list_t[li_m]
       n_inputs, n_outputs = tr_t.shape[1], 1
-      stri = post_list_class[li_m]
+      stri = post_list[li_m]
 
       if useEOF == 0:
         #без использования EOF
@@ -404,7 +404,7 @@ def train_model(df, list_t, li_m, type_m = 'regr', useEOF = 0):
     else:
       tr_t, tr_l, te_t, te_l, v_r = list_t[li_m]
       n_inputs, n_outputs = tr_t.shape[1], 1
-      stri = post_list_regr[li_m]
+      stri = post_list[li_m]
 
       if useEOF == 0:
         #без использования EOF

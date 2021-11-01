@@ -181,7 +181,7 @@ def sta_split(trsgi_values, pcs_or_kmeans, use_norm = True, type_op = 'regr', us
         train_trsgi = np.concatenate((train_trsgi, val_trsgi))
         train_labels = np.concatenate((train_labels, val_labels))
 
-   return train_trsgi, train_labels, test_trsgi, test_labels, val_rate
+    return train_trsgi, train_labels, test_trsgi, test_labels, val_rate
 
 
 

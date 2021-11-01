@@ -424,7 +424,7 @@ def train_model(eofs, df, list_t, post_list, li_m, type_m = 'regr', useEOF = 0):
         
       if useEOF == 2:
         #с использованием примитивов EOF
-        stri = stri + '_eof1'
+        stri = stri + '_eof2'
         model = get_model_frozen_regression(n_inputs, n_outputs, eofs, True, True)
         model, hystory = simp_net_regression(tr_t, tr_l, stri, eofs, model, v_r)
         

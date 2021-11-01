@@ -2,6 +2,7 @@ import utils
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import normalize
+import pandas as pd
 
 def k_means(pcs, n_clust, text_c, use_norm=False):
 

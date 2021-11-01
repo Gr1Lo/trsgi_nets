@@ -393,12 +393,12 @@ def train_model(eofs, df, list_t, post_list, li_m, type_m = 'regr', useEOF = 0):
       print(score)
       df = df.append({'Name': stri, 
                                     'params': hystory.params, 
-                                    'loss': hystory.history['loss'][-1], 
-                                    'accuracy': hystory.history['accuracy'][-1], 
-                                    'val_loss': hystory.history['val_loss'][-1], 
-                                    'val_accuracy': hystory.history['val_accuracy'][-1], 
-                                    'test_loss': score[0], 
-                                    'test_accuracy': score[1]}, ignore_index=True)
+                                    'loss': round(hystory.history['loss'][-1], 2), 
+                                    'accuracy': round(hystory.history['accuracy'][-1], 2), 
+                                    'val_loss': round(hystory.history['val_loss'][-1], 2), 
+                                    'val_accuracy': round(hystory.history['val_accuracy'][-1], 2), 
+                                    'test_loss': round(score[0], 2), 
+                                    'test_accuracy': round(score[1], 2)}, ignore_index=True)
 
       return df, model
 
@@ -433,8 +433,8 @@ def train_model(eofs, df, list_t, post_list, li_m, type_m = 'regr', useEOF = 0):
       print(score)
       df = df.append({'Name': stri, 
                               'params': hystory.params, 
-                              'loss': hystory.history['loss'][-1],
-                              'val_loss': hystory.history['val_loss'][-1], 
-                              'test_loss': score}, ignore_index=True)
+                              'loss': round(hystory.history['loss'][-1], 2),
+                              'val_loss': round(hystory.history['val_loss'][-1], 2), 
+                              'test_loss': round(score, 2)}, ignore_index=True)
 
       return df, model

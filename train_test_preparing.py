@@ -154,13 +154,13 @@ def sta_split(trsgi_values, pcs_or_kmeans, use_norm = True, type_op = 'regr', us
     if use5 == None:
       if type_op == 'regr':
         # разбивка для регрессионной задачи
-        train_trsgi, train_labels, test_trsgi, test_labels = train_and_test(trsgi_values, pcs_or_kmeans[:109])
+        train_trsgi, train_labels, test_trsgi, test_labels, val_rate = train_and_test(trsgi_values, pcs_or_kmeans[:109]), 1
         if use_aug:
           train_trsgi, train_labels = sta_augment(trsgi_values, pcs)
 
       if type_op == 'class':
         # разбивка для классификационной задачи
-        train_trsgi, train_labels, test_trsgi, test_labels = train_and_test(trsgi_values, pcs_or_kmeans.labels_[:109])
+        train_trsgi, train_labels, test_trsgi, test_labels, val_rate = train_and_test(trsgi_values, pcs_or_kmeans.labels_[:109]), 1
 
       return train_trsgi, train_labels, test_trsgi, test_labels
 

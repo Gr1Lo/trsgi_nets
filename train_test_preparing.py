@@ -1,4 +1,6 @@
 import numpy as np
+from sklearn.preprocessing import normalize
+import pandas as pd
 
 def train_and_test(trsgi, labels):
 

@@ -5,6 +5,7 @@ import numpy as np
 import skimage.measure
 import pandas as pd
 import tensorflow as tf
+from matplotlib import pyplot as plt
 
 def get_model_nofrozen_classification(n_inputs, n_classes, use_drop = False):
   '''

@@ -362,7 +362,7 @@ def train_model(df, list_t, li_m, type_m = 'regr', useEOF = 0):
     '''
 
     if type_m == 'class':
-      tr_t, tr_l, te_t, te_l, v_r = list_class[li_m]
+      tr_t, tr_l, te_t, te_l, v_r = list_t[li_m]
       n_inputs, n_outputs = tr_t.shape[1], 1
       stri = post_list_class[li_m]
 
@@ -402,7 +402,7 @@ def train_model(df, list_t, li_m, type_m = 'regr', useEOF = 0):
 
 
     else:
-      tr_t, tr_l, te_t, te_l, v_r = list_regr[li_m]
+      tr_t, tr_l, te_t, te_l, v_r = list_t[li_m]
       n_inputs, n_outputs = tr_t.shape[1], 1
       stri = post_list_regr[li_m]
 

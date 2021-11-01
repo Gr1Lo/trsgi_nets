@@ -345,3 +345,94 @@ def simp_net_regression(trsgi_values, clust, ttl, eofs, model, use5 = None):
     plt.show()
 
     return model, history
+
+  
+  
+  
+def train_model(df, list_t, li_m, type_m = 'regr', useEOF = 0):
+    '''
+    Запуск тренировки моделей
+    df - таблица с результатами
+    list_t - список переменных с данными для обучения
+    li_m - тип сети (регрессия или классификация)
+    useEOF - использование EOF на выходных слоях:
+      0 - не использовать
+      1 - использовать
+      2 - использовать примитивы
+    '''
+
+    if type_m == 'class':
+      tr_t, tr_l, te_t, te_l, v_r = list_class[li_m]
+      n_inputs, n_outputs = tr_t.shape[1], 1
+      stri = post_list_class[li_m]
+
+      if useEOF == 0:
+        #без использования EOF
+        stri = stri + '_eof0'
+        model = get_model_nofrozen_classification(n_inputs, 10, True)
+        model, hystory = simp_net_classification(tr_t, tr_l, stri, model, v_r)
+        
+        
+      if useEOF == 1:
+        #с использованием EOF
+        stri = stri + '_eof1'
+        model = get_model_frozen_classification(n_inputs, eofs, True)
+        model, hystory = simp_net_classification(tr_t, tr_l, stri, model, v_r)
+        
+        
+      if useEOF == 2:
+        #с использованием примитивов EOF
+        stri = stri + '_eof1'
+        model = get_model_frozen_classification(n_inputs, eofs, True, True)
+        model, hystory = simp_net_classification(tr_t, tr_l, stri, model, v_r)
+        
+        
+      score = model.evaluate(te_t, te_l, verbose=2)
+      print(score)
+      df_class = df_class.append({'Name': stri, 
+                                    'params': hystory.params, 
+                                    'loss': hystory.history['loss'][-1], 
+                                    'accuracy': hystory.history['accuracy'][-1], 
+                                    'val_loss': hystory.history['val_loss'][-1], 
+                                    'val_accuracy': hystory.history['val_accuracy'][-1], 
+                                    'test_loss': score[0], 
+                                    'test_accuracy': score[1]}, ignore_index=True)
+
+      return df_class, model
+
+
+    else:
+      tr_t, tr_l, te_t, te_l, v_r = list_regr[li_m]
+      n_inputs, n_outputs = tr_t.shape[1], 1
+      stri = post_list_regr[li_m]
+
+      if useEOF == 0:
+        #без использования EOF
+        stri = stri + '_eof0'
+        model = get_model_nofrozen_regression(n_inputs, n_outputs, True)
+        model, hystory = simp_net_regression(tr_t, tr_l, stri, eofs, model, v_r)
+
+        
+      if useEOF == 1:
+        #с использованием EOF
+        stri = stri + '_eof1'
+        model = get_model_frozen_regression(n_inputs, n_outputs, eofs, True)
+        model, hystory = simp_net_regression(tr_t, tr_l, stri, eofs, model, v_r)
+        
+        
+      if useEOF == 2:
+        #с использованием примитивов EOF
+        stri = stri + '_eof1'
+        model = get_model_frozen_regression(n_inputs, n_outputs, eofs, True, True)
+        model, hystory = simp_net_regression(tr_t, tr_l, stri, eofs, model, v_r)
+        
+        
+      score = model.evaluate(te_t, te_l, verbose=2)
+      print(score)
+      df_regr = df_regr.append({'Name': stri, 
+                              'params': hystory.params, 
+                              'loss': hystory.history['loss'][-1],
+                              'val_loss': hystory.history['val_loss'][-1], 
+                              'test_loss': score}, ignore_index=True)
+
+      return df_regr, model

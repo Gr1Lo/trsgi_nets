@@ -262,7 +262,7 @@ def simp_net_classification(trsgi_values, clust, ttl, model, use5 = None):
       trsgi_values, all_arr = shuffle(trsgi_values, all_arr)
       history = model.fit(trsgi_values,
                           all_arr,
-                          verbose=2,
+                          verbose=0,
                           epochs=200,
                           batch_size = 10,
                           shuffle=True,
@@ -320,7 +320,7 @@ def simp_net_regression(trsgi_values, clust, ttl, eofs, model, use5 = None):
       trsgi_values, all_arr = shuffle(trsgi_values, all_arr)
       history = model.fit(trsgi_values,
                           all_arr,
-                          verbose=2,
+                          verbose=0,
                           epochs=200,
                           batch_size = 10,
                           shuffle=True,

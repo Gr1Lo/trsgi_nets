@@ -8,6 +8,7 @@ import scipy.cluster.hierarchy as shc
 from pyEOF import *
 
 def visualization(da, pcs, eofs_da, evf):
+    n=10
     fig = plt.figure(figsize = (12,24))
 
     ax = fig.add_subplot(n+1,2,1)

@@ -111,3 +111,89 @@ def eof_an(df_clim_index, ds_n, n = 10):
     visualization(ds_n, pcs, eofs_da, evfs)
 
     return (pca, eofs, pcs, evfs)
+
+def regr_graph_check(year, base_year = 1901, df_data = None, ds_n = None, pcs = None, eofs = None, type_f = 'Both'):
+  '''
+  Функция сравнения реальный и предсказанных значений PDSI для регрессии:
+  year - индекс года в наборе данных, 
+  base_year - год отсчета (нужен для перевод индекса в реальный год), 
+  df_data - исходные данные по PDSI, 
+  ds_n = трехмерный массив, используется для извлечения параметров исходных данных, 
+  pcs - предсказанные моделью значения компонент, 
+  eofs - набор значений функций EOF, 
+  type_f - формат вывода:
+    'Real' - выводить рисунок только по исходным данным,
+    'Predicted' - выводить рисунок только по предсказанным данным,
+    'Both' - выводить оба варианта
+  '''
+
+  if type_f in ('Both', 'Real'):
+    u = df_data.to_numpy()[year]
+    new = np.reshape(u, (-1, ds_n.shape[2]))
+    im = plt.imshow(new[::-1], interpolation='none')
+
+    cbar = plt.colorbar(im, ticks=[-4, -3, -2, -1, 0, 1, 2, 3, 4], 
+                        orientation='vertical',
+                        fraction=0.045, pad=0.05)
+    plt.title('Реальные PDSI, год: ' + str(year + base_year))
+    plt.axis('off')
+    plt.tight_layout()
+    plt.show()
+
+  if type_f in ('Both', 'Predicted'):
+    if type(pcs).__module__ != np.__name__:
+      Yhat = np.dot(pcs.to_numpy(), eofs.to_numpy())
+    else:
+      Yhat = np.dot(pcs, eofs.to_numpy())
+
+    u = Yhat[year]
+    new = np.reshape(u, (-1, ds_n.shape[2]))
+    im = plt.imshow(new[::-1], interpolation='none')
+
+    cbar = plt.colorbar(im, ticks=[0], 
+                        orientation='vertical',
+                        fraction=0.045, pad=0.05)
+    plt.title('Предсказанные PDSI, год: ' + str(year + base_year))
+    plt.axis('off')
+    plt.tight_layout()
+    plt.show()
+
+
+    
+def class_graph_check(year, base_year = 1901, df_data = None, ds_n = None, pcs = None, eofs = None, type_f = 'Both'):
+  '''
+  Функция сравнения реальный и предсказанных значений PDSI для классификации:
+  year - индекс года в наборе данных, 
+  base_year - год отсчета (нужен для перевод индекса в реальный год), 
+  df_data - исходные данные по PDSI, 
+  ds_n = трехмерный массив, используется для извлечения параметров исходных данных, 
+  pcs - массив с вероятностями принадлежности года к тому или иному классу, 
+  eofs - набор значений функций EOF, 
+  type_f - формат вывода:
+    'Real' - выводить рисунок только по исходным данным,
+    'Predicted' - выводить рисунок только по предсказанным данным,
+    'Both' - выводить оба варианта
+  '''
+
+  if type_f in ('Both', 'Real'):
+    u = df_data.to_numpy()[year]
+    new = np.reshape(u, (-1, ds_n.shape[2]))
+    im = plt.imshow(new[::-1], interpolation='none')
+
+    cbar = plt.colorbar(im, ticks=[-4, -3, -2, -1, 0, 1, 2, 3, 4], 
+                        orientation='vertical',
+                        fraction=0.045, pad=0.05)
+    plt.title('Реальные PDSI, год: ' + str(year + base_year))
+    plt.axis('off')
+    plt.tight_layout()
+    plt.show()
+
+  if type_f in ('Both', 'Predicted'):
+    eof_in = pred_class[year].argmax()
+    eofs_da = eofs.stack(["latitude","longitude"]).to_xarray()
+    eof_i = eofs_da.sel(EOF=1)["scpdsi"]
+    fig = plt.figure()
+    ax = fig.add_subplot()
+    eof_i.plot(ax=ax,vmin=-0.75, vmax=0.75, cmap="RdBu_r",cbar_kwargs={'label': ""})
+    ax.set_title('Класс (EOF=' + str(eof_in) + '), год: ' + str(base_year+year))
+    

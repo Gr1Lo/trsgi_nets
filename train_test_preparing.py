@@ -24,13 +24,14 @@ def train_and_test(trsgi, labels):
 
   return train_trsgi, train_labels, test_trsgi, test_labels
 
-def train_and_test5(trsgi, labels, start_p):
+def train_and_test5(trsgi, labels, start_p,type_parts):
 
   '''
   Разделение выборки на тренировочную и тестовую (по пятилеткам)
   trsgi - значения предикторов,
   labels - предсказываемые значения
   start_p - индекс года, с которого начинается тестовая пятилетка
+  type_parts - единица разделения (пятилетки, шестилетки и т.д.)
   Схема пятилеток:
   1) Тестовая пятилетка (tes) --------------- 2) Первая тренировочная пятилетка (tr0)
             |                                              |
@@ -47,7 +48,7 @@ def train_and_test5(trsgi, labels, start_p):
     if i >= start_p:
       loc_count += 1
       if prev == 'tr1':
-        if loc_count > 4:
+        if loc_count > type_parts-1:
           prev0 = 'tes'
           loc_count = 0
 
@@ -56,7 +57,7 @@ def train_and_test5(trsgi, labels, start_p):
         test_nums[i] = 1
 
       if prev == 'tes':
-        if loc_count > 4:
+        if loc_count > type_parts-1:
           prev0 = 'tr0'
           loc_count = 0
 
@@ -65,7 +66,7 @@ def train_and_test5(trsgi, labels, start_p):
         test_nums[i] = 0
 
       if prev == 'tr0':
-        if loc_count > 4:
+        if loc_count > type_parts-1:
           prev0 = 'val'
           loc_count = 0
 
@@ -74,7 +75,7 @@ def train_and_test5(trsgi, labels, start_p):
         test_nums[i] = 0
 
       if prev == 'val':
-        if loc_count > 4:
+        if loc_count > type_parts-1:
           prev0 = 'tr1'
           loc_count = 0
 
@@ -135,7 +136,7 @@ def sta_augment(trsgi_values, pcs):
 
   return trsgi_copy, pcs_copy
 
-def sta_split(trsgi_values, pcs_or_kmeans, use_norm = True, type_op = 'regr', use5 = None, use_aug = False):
+def sta_split(trsgi_values, pcs_or_kmeans, use_norm = True, type_op = 'regr', use5 = None, type_parts = 5, use_aug = False):
     '''
     Запуск разделения выборки на тренировочную и тестовую
     trsgi_values - набор предикторов, 
@@ -169,7 +170,7 @@ def sta_split(trsgi_values, pcs_or_kmeans, use_norm = True, type_op = 'regr', us
     else:
       if type_op == 'regr':
         # разбивка для регрессионной задачи
-        train_trsgi, train_labels, val_labels, val_trsgi, test_trsgi, test_labels, val_rate = train_and_test5(trsgi_values, pcs_or_kmeans[:109], use5)
+        train_trsgi, train_labels, val_labels, val_trsgi, test_trsgi, test_labels, val_rate = train_and_test5(trsgi_values, pcs_or_kmeans[:109], use5, type_parts)
         if use_aug:
           train_trsgi, train_labels = sta_augment(train_trsgi, train_labels)
           val_trsgi, val_labels = sta_augment(val_trsgi, val_labels)
@@ -181,12 +182,8 @@ def sta_split(trsgi_values, pcs_or_kmeans, use_norm = True, type_op = 'regr', us
 
       if type_op == 'class':
         # разбивка для классификационной задачи
-        train_trsgi, train_labels, val_labels, val_trsgi, test_trsgi, test_labels, val_rate = train_and_test5(trsgi_values, pcs_or_kmeans.labels_[:109], use5)
+        train_trsgi, train_labels, val_labels, val_trsgi, test_trsgi, test_labels, val_rate = train_and_test5(trsgi_values, pcs_or_kmeans.labels_[:109], use5, type_parts)
         train_trsgi = np.concatenate((train_trsgi, val_trsgi))
         train_labels = np.concatenate((train_labels, val_labels))
 
     return train_trsgi, train_labels, test_trsgi, test_labels, val_rate
-
-
-
-

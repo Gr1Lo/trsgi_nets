@@ -189,7 +189,7 @@ def class_graph_check(year, base_year = 1901, df_data = None, ds_n = None, pcs =
     plt.show()
 
   if type_f in ('Both', 'Predicted'):
-    eof_in = pred_class[year].argmax()
+    eof_in = pcs[year].argmax()
     eofs_da = eofs.stack(["latitude","longitude"]).to_xarray()
     eof_i = eofs_da.sel(EOF=1)["scpdsi"]
     fig = plt.figure()

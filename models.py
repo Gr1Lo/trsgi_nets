@@ -371,21 +371,21 @@ def train_model(eofs, df, list_t, post_list, li_m, type_m = 'regr', useEOF = 0):
       if useEOF == 0:
         #без использования EOF
         stri = stri + '_eof0'
-        model = get_model_nofrozen_classification(n_inputs, 10, True)
+        model = get_model_nofrozen_classification(n_inputs, 10, False)
         model, hystory = simp_net_classification(tr_t, tr_l, stri, model, v_r)
         
         
       if useEOF == 1:
         #с использованием EOF
         stri = stri + '_eof1'
-        model = get_model_frozen_classification(n_inputs, eofs, True)
+        model = get_model_frozen_classification(n_inputs, eofs, False)
         model, hystory = simp_net_classification(tr_t, tr_l, stri, model, v_r)
         
         
       if useEOF == 2:
         #с использованием примитивов EOF
         stri = stri + '_eof2'
-        model = get_model_frozen_classification(n_inputs, eofs, True, True)
+        model = get_model_frozen_classification(n_inputs, eofs, False, True)
         model, hystory = simp_net_classification(tr_t, tr_l, stri, model, v_r)
         
         
@@ -411,21 +411,21 @@ def train_model(eofs, df, list_t, post_list, li_m, type_m = 'regr', useEOF = 0):
       if useEOF == 0:
         #без использования EOF
         stri = stri + '_eof0'
-        model = get_model_nofrozen_regression(n_inputs, n_outputs, True)
+        model = get_model_nofrozen_regression(n_inputs, n_outputs, False)
         model, hystory = simp_net_regression(tr_t, tr_l, stri, eofs, model, v_r)
 
         
       if useEOF == 1:
         #с использованием EOF
         stri = stri + '_eof1'
-        model = get_model_frozen_regression(n_inputs, n_outputs, eofs, True)
+        model = get_model_frozen_regression(n_inputs, n_outputs, eofs, False)
         model, hystory = simp_net_regression(tr_t, tr_l, stri, eofs, model, v_r)
         
         
       if useEOF == 2:
         #с использованием примитивов EOF
         stri = stri + '_eof2'
-        model = get_model_frozen_regression(n_inputs, n_outputs, eofs, True, True)
+        model = get_model_frozen_regression(n_inputs, n_outputs, eofs, False, True)
         model, hystory = simp_net_regression(tr_t, tr_l, stri, eofs, model, v_r)
         
         

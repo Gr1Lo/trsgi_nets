@@ -201,14 +201,16 @@ def diff(row, name_c):
   #Расчет полей с разницей метрик модели
   if name_c == 'test_loss-loss':
     res = row['test_loss'] - row['loss']
+    return res
 
   if name_c == 'tes_loss-val_loss':
     res = row['test_loss'] - row['val_loss']
+    return res
 
   if name_c == 'test_accuracy-accuracy':
     res = row['test_accuracy'] - row['accuracy']
+    return res
 
   if name_c == 'test_accuracy-val_accuracy':
     res = row['test_accuracy'] - row['val_accuracy']
-
-  return res
+    return res

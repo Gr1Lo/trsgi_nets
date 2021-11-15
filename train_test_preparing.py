@@ -187,3 +187,15 @@ def sta_split(trsgi_values, pcs_or_kmeans, use_norm = True, type_op = 'regr', us
         train_labels = np.concatenate((train_labels, val_labels))
 
     return train_trsgi, train_labels, test_trsgi, test_labels, val_rate
+  
+def filt_arr(type_m, norm, aug, use_01, use_02, eof):
+  all_arr = []
+  for norm_i in norm:
+    for aug_i in aug:
+      for use_01_i in use_01:
+        for use_02_i in use_02:
+          for eof_i in eof:
+            m_str = type_m + '_norm' + str(norm_i) + '_aug' + str(aug_i) + '_use' + str(use_01_i) + str(use_02_i) + '_EOF' + str(eof_i)
+            all_arr.append(m_str)
+
+  return all_arr

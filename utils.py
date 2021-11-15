@@ -197,3 +197,18 @@ def class_graph_check(year, base_year = 1901, df_data = None, ds_n = None, pcs =
     eof_i.plot(ax=ax,vmin=-0.75, vmax=0.75, cmap="RdBu_r",cbar_kwargs={'label': ""})
     ax.set_title('Класс (EOF=' + str(eof_in) + '), год: ' + str(base_year+year))
     
+def diff(row, name_c):
+  #Расчет полей с разницей метрик модели
+  if name_c == 'test_loss-loss':
+    res = row['test_loss'] - row['loss']
+
+  if name_c == 'tes_loss-val_loss':
+    res = row['test_loss'] - row['val_loss']
+
+  if name_c == 'test_accuracy-accuracy':
+    res = row['test_accuracy'] - row['accuracy']
+
+  if name_c == 'test_accuracy-val_accuracy':
+    res = row['test_accuracy'] - row['val_accuracy']
+
+  return res

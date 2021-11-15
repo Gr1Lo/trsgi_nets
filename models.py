@@ -410,21 +410,21 @@ def train_model(eofs, df, list_t, post_list, li_m, type_m = 'regr', useEOF = 0):
 
       if useEOF == 0:
         #без использования EOF
-        stri = stri + '_eof0'
+        stri = stri + '_EOF0'
         model = get_model_nofrozen_regression(n_inputs, n_outputs, True)
         model, hystory = simp_net_regression(tr_t, tr_l, stri, eofs, model, v_r)
 
         
       if useEOF == 1:
         #с использованием EOF
-        stri = stri + '_eof1'
+        stri = stri + '_EOF1'
         model = get_model_frozen_regression(n_inputs, n_outputs, eofs, True)
         model, hystory = simp_net_regression(tr_t, tr_l, stri, eofs, model, v_r)
         
         
       if useEOF == 2:
         #с использованием примитивов EOF
-        stri = stri + '_eof2'
+        stri = stri + '_EOF2'
         model = get_model_frozen_regression(n_inputs, n_outputs, eofs, True, True)
         model, hystory = simp_net_regression(tr_t, tr_l, stri, eofs, model, v_r)
         

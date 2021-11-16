@@ -203,7 +203,7 @@ def diff(row, name_c):
     res = row['test_loss'] - row['loss']
     return res
 
-  if name_c == 'tes_loss-val_loss':
+  if name_c == 'test_loss-val_loss':
     res = row['test_loss'] - row['val_loss']
     return res
 

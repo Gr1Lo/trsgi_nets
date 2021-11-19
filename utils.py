@@ -102,7 +102,7 @@ def eof_an(df_clim_index, ds_n, n = 10, scale_type = 0, pca_type = "varimax"):
     scale_type - параметр, отвечающий за масштабирование при расчете EOF
     '''
 
-    pca = df_eof(df_clim_index,pca_type=None,n_components=n)
+    pca = df_eof(df_clim_index,pca_type=pca_type,n_components=n)
     eofs = pca.eofs(s=2, n=n)
     eofs_da = eofs.stack(["latitude","longitude"]).to_xarray()
     pcs = pca.pcs(s=scale_type, n=n)

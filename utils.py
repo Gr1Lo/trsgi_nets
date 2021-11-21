@@ -103,7 +103,7 @@ def eof_an(df_clim_index, ds_n, n = 10, scale_type = 0, pca_type = "varimax"):
     '''
 
     pca = df_eof(df_clim_index,pca_type=pca_type,n_components=n)
-    eofs = pca.eofs(s=2, n=n)
+    eofs = pca.eofs(s=scale_type, n=n)
     eofs_da = eofs.stack(["latitude","longitude"]).to_xarray()
     pcs = pca.pcs(s=scale_type, n=n)
     evfs = pca.evf(n=n)

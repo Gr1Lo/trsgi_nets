@@ -110,9 +110,9 @@ def eof_an(df_clim_index, ds_n, n = 10, scale_type = 0, pca_type = "varimax"):
     eigvals = pca.eigvals(n=n)
 
     # plot
-    visualization(ds_n, pcs, eofs_da, evfs, eigvals)
+    visualization(ds_n, pcs, eofs_da, evfs)
 
-    return (pca, eofs, pcs, evfs)
+    return (pca, eofs, pcs, evfs, eigvals)
 
 def regr_graph_check(year, base_year = 1901, df_data = None, ds_n = None, pcs = None, eofs = None, type_f = 'Both'):
   '''

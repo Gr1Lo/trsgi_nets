@@ -107,9 +107,10 @@ def eof_an(df_clim_index, ds_n, n = 10, scale_type = 0, pca_type = "varimax"):
     eofs_da = eofs.stack(["latitude","longitude"]).to_xarray()
     pcs = pca.pcs(s=scale_type, n=n)
     evfs = pca.evf(n=n)
+    eigvals = pca.eigvals(n=n)
 
     # plot
-    visualization(ds_n, pcs, eofs_da, evfs)
+    visualization(ds_n, pcs, eofs_da, evfs, eigvals)
 
     return (pca, eofs, pcs, evfs)
 

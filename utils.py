@@ -114,23 +114,41 @@ def eof_an(df_clim_index, ds_n, n = 10, scale_type = 0, pca_type = "varimax"):
 
     return (pca, eofs, pcs, evfs, eigvals)
 
-def regr_graph_check(year, base_year = 1901, df_data = None, ds_n = None, pcs = None, eofs = None, type_f = 'Both'):
+def regr_graph_check(year, 
+                     base_year = 1901, 
+                     df_data = None, 
+                     ds_n = None, 
+                     pca = None,
+                     pcs = None, 
+                     eofs = None, 
+                     eigvals = None, 
+                     type_f = 'Both',
+                     scale_type = 2):
   '''
   Функция сравнения реальный и предсказанных значений PDSI для регрессии:
   year - индекс года в наборе данных, 
   base_year - год отсчета (нужен для перевод индекса в реальный год), 
   df_data - исходные данные по PDSI, 
-  ds_n = трехмерный массив, используется для извлечения параметров исходных данных, 
+  ds_n - трехмерный массив, используется для извлечения параметров исходных данных, 
+  pca - объект, полученный в результате eof_an,
   pcs - предсказанные моделью значения компонент, 
   eofs - набор значений функций EOF, 
+  eigvals - собственные числа EOF,
   type_f - формат вывода:
     'Real' - выводить рисунок только по исходным данным,
     'Predicted' - выводить рисунок только по предсказанным данным,
     'Both' - выводить оба варианта
+  scale_type - параметр отвечающий за масштабирование главных компонент и 
+                EOF через умножение/деление значений на собственные числа
   '''
 
   if type_f in ('Both', 'Real'):
-    u = df_data.to_numpy()[year]
+    if type(df_data).__module__ != np.__name__:
+      u = df_data.to_numpy()[year]
+    else:
+      u = df_data[year]
+     
+    
     new = np.reshape(u, (-1, ds_n.shape[2]))
     im = plt.imshow(new[::-1], interpolation='none')
 
@@ -142,20 +160,60 @@ def regr_graph_check(year, base_year = 1901, df_data = None, ds_n = None, pcs = 
     plt.tight_layout()
     plt.show()
 
-  if type_f in ('Both', 'Predicted'):
-    if type(pcs).__module__ != np.__name__:
-      Yhat = np.dot(pcs.to_numpy(), eofs.to_numpy())
-    else:
-      Yhat = np.dot(pcs, eofs.to_numpy())
 
+
+  if type_f in ('Both', 'Predicted'):
+
+    if scale_type == 2:
+      eofs = eofs[0:len(eofs)] / np.sqrt(eigvals[0:len(eofs)])[:, np.newaxis]
+      if type(pcs).__module__ != np.__name__:
+        pcs = pcs.to_numpy()[:, 0:len(eofs)] / np.sqrt(eigvals[0:len(eofs)])
+      else:
+        pcs = pcs[:, 0:len(eofs)] / np.sqrt(eigvals[0:len(eofs)])
+
+    if scale_type == 1:
+      eofs = eofs[0:len(eofs)] * np.sqrt(eigvals[0:len(eofs)])[:, np.newaxis]
+      if type(pcs).__module__ != np.__name__:
+        pcs = pcs.to_numpy()[:, 0:len(eofs)] * np.sqrt(eigvals[0:len(eofs)])
+      else:
+        pcs = pcs[:, 0:len(eofs)] * np.sqrt(eigvals[0:len(eofs)])
+
+
+    Yhat = np.dot(pcs, eofs.to_numpy())
+    Yhat = pca._scaler.inverse_transform(Yhat)
     u = Yhat[year]
+    
+
     new = np.reshape(u, (-1, ds_n.shape[2]))
     im = plt.imshow(new[::-1], interpolation='none')
 
-    cbar = plt.colorbar(im, ticks=[0], 
+    cbar = plt.colorbar(im, ticks=[-4, -3, -2, -1, 0, 1, 2, 3, 4], 
                         orientation='vertical',
                         fraction=0.045, pad=0.05)
     plt.title('Предсказанные PDSI, год: ' + str(year + base_year))
+    plt.axis('off')
+    plt.tight_layout()
+    plt.show()
+
+
+  if type_f in ('Both'):
+
+    Yhat = np.dot(pcs, eofs.to_numpy())
+
+    if type(df_data).__module__ != np.__name__:
+      u = df_data.to_numpy()[year]
+    else:
+      u = df_data[year]
+
+    u = u - Yhat[year]
+
+    new = np.reshape(u, (-1, ds_n.shape[2]))
+    im = plt.imshow(new[::-1], interpolation='none')
+
+    cbar = plt.colorbar(im, ticks=[-4, -3, -2, -1, 0, 1, 2, 3, 4], 
+                        orientation='vertical',
+                        fraction=0.045, pad=0.05)
+    plt.title('Разница PDSI, год: ' + str(year + base_year))
     plt.axis('off')
     plt.tight_layout()
     plt.show()

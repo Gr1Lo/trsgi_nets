@@ -12,7 +12,7 @@ def r_execel(f_path):
     fn_list = df['file_name'].unique()
 
     trsgi_values = []
-    for i in (range(1900, np.max(df['age'])+1)):
+    for i in (range(1901, np.max(df['age'])+1)):
       one_year_arr = []
       print(i)
       df0 = df[df['age'] == i]

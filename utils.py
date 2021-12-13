@@ -7,8 +7,7 @@ from sklearn.metrics import silhouette_score
 import scipy.cluster.hierarchy as shc
 from pyEOF import *
 
-def visualization(da, pcs, eofs_da, evf):
-    n=10
+def visualization(da, pcs, eofs_da, evf, n):
     fig = plt.figure(figsize = (12,24))
 
     ax = fig.add_subplot(n+1,2,1)
@@ -110,7 +109,7 @@ def eof_an(df_clim_index, ds_n, n = 10, scale_type = 0, pca_type = "varimax"):
     eigvals = pca.eigvals(n=n)
 
     # plot
-    visualization(ds_n, pcs, eofs_da, evfs)
+    visualization(ds_n, pcs, eofs_da, evfs, n)
 
     return (pca, eofs, pcs, evfs, eigvals)
 

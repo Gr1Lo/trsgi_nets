@@ -22,16 +22,16 @@ def get_model_nofrozen_classification(n_inputs, n_classes, use_drop = False):
   model = Sequential()
   model.add(Dense(30, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
   if use_drop == True:
-    model.add(Dropout(0.30))
+    model.add(Dropout(0.10))
 
   model.add(Dense(30, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
   if use_drop == True:
-    model.add(Dropout(0.30))
+    model.add(Dropout(0.10))
 
   layer_1 = Dense(1000, kernel_initializer='he_uniform', activation='relu')
   model.add(layer_1)
   if use_drop == True:
-    model.add(Dropout(0.30))
+    model.add(Dropout(0.10))
 
   layer_last = Dense(n_classes, activation='softmax')
   model.add(layer_last)
@@ -52,16 +52,16 @@ def get_model_nofrozen_regression(n_inputs, n_outputs, use_drop = False):
   model = Sequential()
   model.add(Dense(30, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
   if use_drop == True:
-    model.add(Dropout(0.30))
+    model.add(Dropout(0.10))
   model.add(Dense(30, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
   if use_drop == True:
-    model.add(Dropout(0.30))
+    model.add(Dropout(0.10))
   model.add(Dense(30, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
   if use_drop == True:
-    model.add(Dropout(0.30))
+    model.add(Dropout(0.10))
   model.add(Dense(1000, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
   if use_drop == True:
-    model.add(Dropout(0.3))
+    model.add(Dropout(0.1))
   model.add(Dense(n_outputs, kernel_initializer='he_uniform'))
   return model
 
@@ -127,18 +127,18 @@ def get_model_frozen_regression(n_inputs, n_outputs, eofs, use_drop = False, pri
   model = Sequential()
   model.add(Dense(30, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
   if use_drop == True:
-    model.add(Dropout(0.30))
+    model.add(Dropout(0.10))
   model.add(Dense(30, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
   if use_drop == True:
-    model.add(Dropout(0.30))
+    model.add(Dropout(0.10))
   model.add(Dense(30, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
   if use_drop == True:
-    model.add(Dropout(0.30))
+    model.add(Dropout(0.10))
 
   layer_1 = Dense(len(fr_weights), kernel_initializer='he_uniform', activation='relu')
   model.add(layer_1)
   if use_drop == True:
-    model.add(Dropout(0.30))
+    model.add(Dropout(0.10))
   layer_last = Dense(len(fr_bais), activation='relu')
   model.add(layer_last)
 
@@ -210,13 +210,13 @@ def get_model_frozen_classification(n_inputs, eofs, use_drop = False, primEOF = 
   model = Sequential()
   model.add(Dense(30, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
   if use_drop == True:
-    model.add(Dropout(0.30))
+    model.add(Dropout(0.10))
   model.add(Dense(30, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
   if use_drop == True:
-    model.add(Dropout(0.30))
+    model.add(Dropout(0.10))
   model.add(Dense(30, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
   if use_drop == True:
-    model.add(Dropout(0.30))
+    model.add(Dropout(0.10))
   layer_1 = Dense(len(fr_weights), kernel_initializer='he_uniform', activation='relu')
   model.add(layer_1)
   layer_last = Dense(len(fr_bais), activation='softmax')

@@ -23,18 +23,18 @@ def get_model_nofrozen_classification(n_inputs, n_classes, use_drop = False):
   model.add(Dense(30, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
   model.add(BatchNormalization())
   if use_drop == True:
-    model.add(Dropout(0.10))
+    model.add(Dropout(0.30))
 
   model.add(Dense(30, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
   model.add(BatchNormalization())
   if use_drop == True:
-    model.add(Dropout(0.10))
+    model.add(Dropout(0.30))
 
   layer_1 = Dense(1000, kernel_initializer='he_uniform', activation='relu')
   model.add(layer_1)
   model.add(BatchNormalization())
   if use_drop == True:
-    model.add(Dropout(0.10))
+    model.add(Dropout(0.30))
 
   layer_last = Dense(n_classes, activation='softmax')
   model.add(layer_last)
@@ -56,19 +56,19 @@ def get_model_nofrozen_regression(n_inputs, n_outputs, use_drop = False):
   model.add(Dense(30, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
   model.add(BatchNormalization())
   if use_drop == True:
-    model.add(Dropout(0.10))
+    model.add(Dropout(0.30))
   model.add(Dense(30, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
   model.add(BatchNormalization())
   if use_drop == True:
-    model.add(Dropout(0.10))
+    model.add(Dropout(0.30))
   model.add(Dense(30, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
   model.add(BatchNormalization())
   if use_drop == True:
-    model.add(Dropout(0.10))
+    model.add(Dropout(0.30))
   model.add(Dense(1000, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
   model.add(BatchNormalization())
   if use_drop == True:
-    model.add(Dropout(0.1))
+    model.add(Dropout(0.3))
   model.add(Dense(n_outputs, kernel_initializer='he_uniform'))
   return model
 
@@ -135,20 +135,20 @@ def get_model_frozen_regression(n_inputs, n_outputs, eofs, use_drop = False, pri
   model.add(Dense(30, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
   model.add(BatchNormalization())
   if use_drop == True:
-    model.add(Dropout(0.10))
+    model.add(Dropout(0.30))
   model.add(Dense(30, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
   model.add(BatchNormalization())
   if use_drop == True:
-    model.add(Dropout(0.10))
+    model.add(Dropout(0.30))
   model.add(Dense(30, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
   model.add(BatchNormalization())
   if use_drop == True:
-    model.add(Dropout(0.10))
+    model.add(Dropout(0.30))
 
   layer_1 = Dense(len(fr_weights), kernel_initializer='he_uniform', activation='relu')
   model.add(layer_1)
   if use_drop == True:
-    model.add(Dropout(0.10))
+    model.add(Dropout(0.30))
   layer_last = Dense(len(fr_bais), activation='relu')
   model.add(layer_last)
 
@@ -221,15 +221,15 @@ def get_model_frozen_classification(n_inputs, eofs, use_drop = False, primEOF = 
   model.add(Dense(30, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
   model.add(BatchNormalization())
   if use_drop == True:
-    model.add(Dropout(0.10))
+    model.add(Dropout(0.30))
   model.add(Dense(30, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
   model.add(BatchNormalization())
   if use_drop == True:
-    model.add(Dropout(0.10))
+    model.add(Dropout(0.30))
   model.add(Dense(30, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
   model.add(BatchNormalization())
   if use_drop == True:
-    model.add(Dropout(0.10))
+    model.add(Dropout(0.30))
   layer_1 = Dense(len(fr_weights), kernel_initializer='he_uniform', activation='relu')
   model.add(layer_1)
   layer_last = Dense(len(fr_bais), activation='softmax')
@@ -261,8 +261,8 @@ def simp_net_classification(trsgi_values, clust, ttl, model, use5 = None):
 
     #Прописан параметр ранней остановки:
     #В случае, когда значения val_accuracy в течении 30 итераций не улучшаются
-    #больше, чем на 0.1, обучение прекращается
-    callback = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=30, min_delta=0.1)
+    #больше, чем на 0.3, обучение прекращается
+    callback = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=30, min_delta=0.3)
 
     model.compile(optimizer='adam',
                   loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),

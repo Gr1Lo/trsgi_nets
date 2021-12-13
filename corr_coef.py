@@ -59,7 +59,7 @@ def corr_coef_year(year,
     corr = pearsonr(u0[~nas],u[~nas])
     corr_s = spearmanr(u0[~nas],u[~nas])
 
-    if type_ret == 'Mute':
+    if type_ret != 'Mute':
       _ = plt.hist(u0, bins='auto')
       plt.title('Распределение значений scPDSI в исходных данных для (' + str_lat + ', ' + str_lon + ') пикселя')
       plt.show()
@@ -155,7 +155,7 @@ def corr_coef_pixel(str_lat,
     corr = pearsonr(u0[~nas],u[~nas])
     corr_s = spearmanr(u0[~nas],u[~nas])
 
-    if type_ret == 'Mute':
+    if type_ret != 'Mute':
       _ = plt.hist(u0, bins='auto')
       plt.title('Распределение значений scPDSI в исходных данных для (' + str_lat + ', ' + str_lon + ') пикселя')
       plt.show()

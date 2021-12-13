@@ -1,32 +1,4 @@
 
-Skip to content
-Pull requests
-Issues
-Marketplace
-Explore
-@Gr1Lo
-Gr1Lo /
-trsgi_nets
-Public
-
-Code
-Issues
-Pull requests
-Actions
-Projects
-Wiki
-Security
-Insights
-
-    Settings
-
-trsgi_nets/train_test_preparing.py /
-@Gr1Lo
-Gr1Lo Update train_test_preparing.py
-Latest commit 9b46a47 15 days ago
-History
-1 contributor
-201 lines (162 sloc) 7.48 KB
 import numpy as np
 from sklearn.preprocessing import normalize
 import pandas as pd

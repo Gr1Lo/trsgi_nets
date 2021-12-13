@@ -384,7 +384,7 @@ def train_model(eofs, df, list_t, post_list, li_m, type_m = 'regr', useEOF = 0):
       if useEOF == 0:
         #без использования EOF
         stri = stri + '_useEOF0'
-        model = get_model_nofrozen_classification(n_inputs, 10, True)
+        model = get_model_nofrozen_classification(n_inputs, len(eofs), True)
         model, hystory = simp_net_classification(tr_t, tr_l, stri, model, v_r)
         
         

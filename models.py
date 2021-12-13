@@ -62,7 +62,7 @@ def get_model_nofrozen_regression(n_inputs, n_outputs, use_drop = False):
   model.add(Dense(1000, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
   if use_drop == True:
     model.add(Dropout(0.3))
-  model.add(Dense(10, kernel_initializer='he_uniform'))
+  model.add(Dense(n_outputs, kernel_initializer='he_uniform'))
   return model
 
 def get_model_frozen_regression(n_inputs, n_outputs, eofs, use_drop = False, primEOF = False):

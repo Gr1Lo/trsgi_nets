@@ -53,19 +53,19 @@ def get_model_nofrozen_regression(n_inputs, n_outputs, use_drop = False):
   '''
 
   model = Sequential()
-  model.add(Dense(30, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
+  model.add(Dense(300, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
   model.add(BatchNormalization())
   if use_drop == True:
     model.add(Dropout(0.30))
-  model.add(Dense(30, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
+  model.add(Dense(100, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
   model.add(BatchNormalization())
   if use_drop == True:
     model.add(Dropout(0.30))
-  model.add(Dense(30, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
+  model.add(Dense(100, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
   model.add(BatchNormalization())
   if use_drop == True:
     model.add(Dropout(0.30))
-  model.add(Dense(1000, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
+  model.add(Dense(300, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
   model.add(BatchNormalization())
   if use_drop == True:
     model.add(Dropout(0.3))

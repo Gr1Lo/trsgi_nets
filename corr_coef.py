@@ -10,7 +10,8 @@ def corr_coef_year(year,
                      pcs = None, 
                      eofs = None, 
                      eigvals = None, 
-                     scale_type = 2):
+                     scale_type = 2,
+                     type_ret = None):
 
     '''
     Функция подсчета коэффициента корреляции для реальных и предсказанных значений scPDSI для регрессии в рамках одного года:
@@ -23,7 +24,8 @@ def corr_coef_year(year,
     eofs - набор значений функций EOF, 
     eigvals - собственные числа EOF,
     scale_type - параметр отвечающий за масштабирование главных компонент и 
-                  EOF через умножение/деление значений на собственные числа
+                  EOF через умножение/деление значений на собственные числа,
+    type_ret = 'Mute' - не выводить картинки и лишний текст
     '''
 
     if type(df_data).__module__ != np.__name__:
@@ -54,25 +56,30 @@ def corr_coef_year(year,
     normed_data0 = (u0[~nas] - u0[~nas].mean()) / u0[~nas].std() 
     normed_data = (u[~nas] - u[~nas].mean()) / u[~nas].std() 
 
-    _ = plt.hist(u0, bins='auto')
-    plt.title('Распределение значений scPDSI в исходных данных для ' + str(year + base_year) + ' года')
-    plt.show()
-    D, pval = kstest(normed_data0, 'norm')
-    print(normaltest(normed_data0))
-    print('p-value теста Колмогорова-Симрнова для исходных данных = ' + str(pval) + '\n')
-
-    _ = plt.hist(u, bins='auto')
-    plt.title('Распределение значений scPDSI в предсказанных данных для ' + str(year + base_year) + ' года')
-    plt.show()
-    D, pval = kstest(normed_data, 'norm')
-    print(normaltest(normed_data))
-    print('p-value теста Колмогорова-Симрнова для предсказанных данных = ' + str(pval) + '\n')
-    
     corr = pearsonr(u0[~nas],u[~nas])
-    print('Коэффициент корреляции Пирсона = ' + str(corr[0]) + ', p-value = ' + str(corr[1]))
-    
     corr_s = spearmanr(u0[~nas],u[~nas])
-    print('Коэффициент корреляции Спирмана (для ненормального распределения) = ' + str(corr_s[0]) + ', p-value = ' + str(corr_s[1]))
+
+    if type_ret == 'Mute':
+      _ = plt.hist(u0, bins='auto')
+      plt.title('Распределение значений scPDSI в исходных данных для (' + str_lat + ', ' + str_lon + ') пикселя')
+      plt.show()
+      D, pval = kstest(normed_data0, 'norm')
+      print(normaltest(u0[~nas]))
+      print('p-value теста Колмогорова-Симрнова для исходных данных = ' + str(pval) + '\n')
+      
+
+      _ = plt.hist(u, bins='auto')
+      plt.title('Распределение значений scPDSI в предсказанных данных для (' + str_lat + ', ' + str_lon + ') пикселя')
+      plt.show()
+      D, pval = kstest(normed_data, 'norm')
+      print(normaltest(u[~nas]))
+      print('p-value теста Колмогорова-Симрнова для предсказанных данных = ' + str(pval) + '\n')
+      
+
+      print('Коэффициент корреляции Пирсона = ' + str(corr[0]) + ', p-value = ' + str(corr[1]))
+      print('Коэффициент корреляции Спирмана (для ненормального распределения) = ' + str(corr_s[0]) + ', p-value = ' + str(corr_s[1]))
+
+    return corr, corr_s
 
 
 
@@ -86,7 +93,8 @@ def corr_coef_pixel(str_lat,
                      pcs = None, 
                      eofs = None, 
                      eigvals = None,
-                     scale_type = 2):
+                     scale_type = 2,
+                     type_ret = None):
   
     '''
     Функция подсчета коэффициента корреляции для реальных и предсказанных значений scPDSI для регрессии по отдельно взятому пикселю за все годы:
@@ -100,7 +108,8 @@ def corr_coef_pixel(str_lat,
     eofs - набор значений функций EOF, 
     eigvals - собственные числа EOF,
     scale_type - параметр отвечающий за масштабирование главных компонент и 
-                  EOF через умножение/деление значений на собственные числа
+                  EOF через умножение/деление значений на собственные числа,
+    type_ret = 'Mute' - не выводить картинки и лишний текст
     '''
 
     irr_lat = np.array(list(df_data))[:,1]
@@ -140,24 +149,30 @@ def corr_coef_pixel(str_lat,
     normed_data0 = (u0[~nas] - u0[~nas].mean()) / u0[~nas].std() 
     normed_data = (u[~nas] - u[~nas].mean()) / u[~nas].std() 
 
-    _ = plt.hist(u0, bins='auto')
-    plt.title('Распределение значений scPDSI в исходных данных для (' + str_lat + ', ' + str_lon + ') пикселя')
-    plt.show()
-    D, pval = kstest(normed_data0, 'norm')
-    print(normaltest(u0[~nas]))
-    print('p-value теста Колмогорова-Симрнова для исходных данных = ' + str(pval) + '\n')
     
-
-    _ = plt.hist(u, bins='auto')
-    plt.title('Распределение значений scPDSI в предсказанных данных для (' + str_lat + ', ' + str_lon + ') пикселя')
-    plt.show()
-    D, pval = kstest(normed_data, 'norm')
-    print(normaltest(u[~nas]))
-    print('p-value теста Колмогорова-Симрнова для предсказанных данных = ' + str(pval) + '\n')
     
 
     corr = pearsonr(u0[~nas],u[~nas])
-    print('Коэффициент корреляции Пирсона = ' + str(corr[0]) + ', p-value = ' + str(corr[1]))
-    
     corr_s = spearmanr(u0[~nas],u[~nas])
-    print('Коэффициент корреляции Спирмана (для ненормального распределения) = ' + str(corr_s[0]) + ', p-value = ' + str(corr_s[1]))
+
+    if type_ret == 'Mute':
+      _ = plt.hist(u0, bins='auto')
+      plt.title('Распределение значений scPDSI в исходных данных для (' + str_lat + ', ' + str_lon + ') пикселя')
+      plt.show()
+      D, pval = kstest(normed_data0, 'norm')
+      print(normaltest(u0[~nas]))
+      print('p-value теста Колмогорова-Симрнова для исходных данных = ' + str(pval) + '\n')
+      
+
+      _ = plt.hist(u, bins='auto')
+      plt.title('Распределение значений scPDSI в предсказанных данных для (' + str_lat + ', ' + str_lon + ') пикселя')
+      plt.show()
+      D, pval = kstest(normed_data, 'norm')
+      print(normaltest(u[~nas]))
+      print('p-value теста Колмогорова-Симрнова для предсказанных данных = ' + str(pval) + '\n')
+      
+
+      print('Коэффициент корреляции Пирсона = ' + str(corr[0]) + ', p-value = ' + str(corr[1]))
+      print('Коэффициент корреляции Спирмана (для ненормального распределения) = ' + str(corr_s[0]) + ', p-value = ' + str(corr_s[1]))
+
+    return corr, corr_s

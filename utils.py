@@ -8,7 +8,7 @@ import scipy.cluster.hierarchy as shc
 from pyEOF import *
 
 def visualization(da, pcs, eofs_da, evf, n):
-    fig = plt.figure(figsize = (12,24))
+    fig = plt.figure(figsize = (12,2.5*n))
 
     ax = fig.add_subplot(n+1,2,1)
     da.mean(dim=["latitude","longitude"]).plot(ax=ax)

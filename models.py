@@ -379,7 +379,7 @@ def simp_net_regression(trsgi_values, clust, ttl, eofs, model, use5 = None):
   
   
   
-def train_model(eofs, df, list_t, post_list, li_m, type_m = 'regr', useEOF = 0):
+def train_model(eofs, df, list_t, post_list, li_m, type_m = 'regr', useEOF = 0, use_batch_norm = False):
     '''
     Запуск тренировки моделей
     eofs - набор значений двумерных EOF
@@ -401,21 +401,21 @@ def train_model(eofs, df, list_t, post_list, li_m, type_m = 'regr', useEOF = 0):
       if useEOF == 0:
         #без использования EOF
         stri = stri + '_useEOF0'
-        model = get_model_nofrozen_classification(n_inputs, len(eofs), True, use_batch_norm = False)
+        model = get_model_nofrozen_classification(n_inputs, len(eofs), True, use_batch_norm = use_batch_norm)
         model, hystory = simp_net_classification(tr_t, tr_l, stri, model, v_r)
         
         
       if useEOF == 1:
         #с использованием EOF
         stri = stri + '_useEOF1'
-        model = get_model_frozen_classification(n_inputs, eofs, True, use_batch_norm = False)
+        model = get_model_frozen_classification(n_inputs, eofs, True, use_batch_norm = use_batch_norm)
         model, hystory = simp_net_classification(tr_t, tr_l, stri, model, v_r)
         
         
       if useEOF == 2:
         #с использованием примитивов EOF
         stri = stri + '_useEOF2'
-        model = get_model_frozen_classification(n_inputs, eofs, True, True, use_batch_norm = False)
+        model = get_model_frozen_classification(n_inputs, eofs, True, True, use_batch_norm = use_batch_norm)
         model, hystory = simp_net_classification(tr_t, tr_l, stri, model, v_r)
         
         

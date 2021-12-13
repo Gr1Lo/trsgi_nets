@@ -61,7 +61,7 @@ def corr_coef_year(year,
 
     if type_ret != 'Mute':
       _ = plt.hist(u0, bins='auto')
-      plt.title('Распределение значений scPDSI в исходных данных для (' + str_lat + ', ' + str_lon + ') пикселя')
+      plt.title('Распределение значений scPDSI в исходных данных для (' + str(base_year+year)+ ') года')
       plt.show()
       D, pval = kstest(normed_data0, 'norm')
       print(normaltest(u0[~nas]))
@@ -69,7 +69,7 @@ def corr_coef_year(year,
       
 
       _ = plt.hist(u, bins='auto')
-      plt.title('Распределение значений scPDSI в предсказанных данных для (' + str_lat + ', ' + str_lon + ') пикселя')
+      plt.title('Распределение значений scPDSI в предсказанных данных для (' + str(base_year+year) + ') года')
       plt.show()
       D, pval = kstest(normed_data, 'norm')
       print(normaltest(u[~nas]))

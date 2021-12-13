@@ -8,12 +8,13 @@ import tensorflow as tf
 from matplotlib import pyplot as plt
 from sklearn.utils import shuffle
 
-def get_model_nofrozen_classification(n_inputs, n_classes, use_drop = False):
+def get_model_nofrozen_classification(n_inputs, n_classes, use_drop = False, use_batch_norm = False):
   '''
   Описание сети для задачи классификации без использования нейронов с EOF
   n_inputs - число предикторов,
   n_classes - число классов на выходе,
   use_drop - параметр, отвечающий за рандомное отключение доли нейронов (30%)
+  use_batch_norm - параметр, отвечающий за использование batch-нормализации
 
   Модель состоит из трех fully-connected (fc) слоев
   и выходного слоя с softmax-функцией из n_classes нейронов:
@@ -21,18 +22,21 @@ def get_model_nofrozen_classification(n_inputs, n_classes, use_drop = False):
   '''
   model = Sequential()
   model.add(Dense(30, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
-  model.add(BatchNormalization())
+  if use_batch_norm == True:
+    model.add(BatchNormalization())
   if use_drop == True:
     model.add(Dropout(0.30))
 
   model.add(Dense(30, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
-  model.add(BatchNormalization())
+  if use_batch_norm == True:
+    model.add(BatchNormalization())
   if use_drop == True:
     model.add(Dropout(0.30))
 
   layer_1 = Dense(1000, kernel_initializer='he_uniform', activation='relu')
   model.add(layer_1)
-  model.add(BatchNormalization())
+  if use_batch_norm == True:
+    model.add(BatchNormalization())
   if use_drop == True:
     model.add(Dropout(0.30))
 
@@ -40,13 +44,14 @@ def get_model_nofrozen_classification(n_inputs, n_classes, use_drop = False):
   model.add(layer_last)
   return model
 
-def get_model_nofrozen_regression(n_inputs, n_outputs, use_drop = False):
+def get_model_nofrozen_regression(n_inputs, n_outputs, use_drop = False, use_batch_norm = False):
 
   '''
   Описание сети для задачи регрессии без использования нейронов с EOF
   n_inputs - число предикторов,
   n_outputs - количество предсказываемых значений,
   use_drop - параметр, отвечающий за рандомное отключение доли нейронов (30%)
+  use_batch_norm - параметр, отвечающий за использование batch-нормализации
 
   Модель состоит из четырех fully-connected (fc) слоев:
   n_inputs -> 30 -> 30 -> 1000 -> 10
@@ -54,25 +59,29 @@ def get_model_nofrozen_regression(n_inputs, n_outputs, use_drop = False):
 
   model = Sequential()
   model.add(Dense(300, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
-  model.add(BatchNormalization())
+  if use_batch_norm == True:
+    model.add(BatchNormalization())
   if use_drop == True:
     model.add(Dropout(0.30))
   model.add(Dense(100, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
-  model.add(BatchNormalization())
+  if use_batch_norm == True:
+    model.add(BatchNormalization())
   if use_drop == True:
     model.add(Dropout(0.30))
   model.add(Dense(100, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
-  model.add(BatchNormalization())
+  if use_batch_norm == True:
+    model.add(BatchNormalization())
   if use_drop == True:
     model.add(Dropout(0.30))
   model.add(Dense(300, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
-  model.add(BatchNormalization())
+  if use_batch_norm == True:
+    model.add(BatchNormalization())
   if use_drop == True:
     model.add(Dropout(0.3))
   model.add(Dense(n_outputs, kernel_initializer='he_uniform'))
   return model
 
-def get_model_frozen_regression(n_inputs, n_outputs, eofs, use_drop = False, primEOF = False):
+def get_model_frozen_regression(n_inputs, n_outputs, eofs, use_drop = False, primEOF = False, use_batch_norm = False):
 
   '''
   Описание сети для задачи регрессии с применением нейронов с EOF
@@ -81,6 +90,7 @@ def get_model_frozen_regression(n_inputs, n_outputs, eofs, use_drop = False, pri
   eofs - набор двумерных EOF,
   use_drop - параметр, отвечающий за рандомное отключение доли нейронов (30%)
   primEOF - параметр, отвечающий за использование примитивов значений EOF
+  use_batch_norm - параметр, отвечающий за использование batch-нормализации
 
   Модель состоит из четырех fully-connected (fc) слоев:
   n_inputs -> 30 -> 30 -> 30 -> число EOF
@@ -133,15 +143,18 @@ def get_model_frozen_regression(n_inputs, n_outputs, eofs, use_drop = False, pri
 
   model = Sequential()
   model.add(Dense(30, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
-  model.add(BatchNormalization())
+  if use_batch_norm == True:
+    model.add(BatchNormalization())
   if use_drop == True:
     model.add(Dropout(0.30))
   model.add(Dense(30, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
-  model.add(BatchNormalization())
+  if use_batch_norm == True:
+    model.add(BatchNormalization())
   if use_drop == True:
     model.add(Dropout(0.30))
   model.add(Dense(30, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
-  model.add(BatchNormalization())
+  if use_batch_norm == True:
+    model.add(BatchNormalization())
   if use_drop == True:
     model.add(Dropout(0.30))
 
@@ -157,7 +170,7 @@ def get_model_frozen_regression(n_inputs, n_outputs, eofs, use_drop = False, pri
   layer_last.trainable=False
   return model
 
-def get_model_frozen_classification(n_inputs, eofs, use_drop = False, primEOF = False):
+def get_model_frozen_classification(n_inputs, eofs, use_drop = False, primEOF = False, use_batch_norm = False):
 
   '''
   Описание сети для задачи классификации с применением нейронов с EOF
@@ -165,6 +178,7 @@ def get_model_frozen_classification(n_inputs, eofs, use_drop = False, primEOF = 
   eofs - набор двумерных EOF,
   use_drop - параметр, отвечающий за рандомное отключение доли нейронов (30%)
   primEOF - параметр, отвечающий за использование примитивов значений EOF
+  use_batch_norm - параметр, отвечающий за использование batch-нормализации
 
   Модель состоит из четырех fully-connected (fc) слоев
   и выходного слоя с softmax-функцией из len(eofs) нейронов:
@@ -219,15 +233,18 @@ def get_model_frozen_classification(n_inputs, eofs, use_drop = False, primEOF = 
 
   model = Sequential()
   model.add(Dense(30, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
-  model.add(BatchNormalization())
+  if use_batch_norm == True:
+    model.add(BatchNormalization())
   if use_drop == True:
     model.add(Dropout(0.30))
   model.add(Dense(30, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
-  model.add(BatchNormalization())
+  if use_batch_norm == True:
+    model.add(BatchNormalization())
   if use_drop == True:
     model.add(Dropout(0.30))
   model.add(Dense(30, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
-  model.add(BatchNormalization())
+  if use_batch_norm == True:
+    model.add(BatchNormalization())
   if use_drop == True:
     model.add(Dropout(0.30))
   layer_1 = Dense(len(fr_weights), kernel_initializer='he_uniform', activation='relu')
@@ -384,21 +401,21 @@ def train_model(eofs, df, list_t, post_list, li_m, type_m = 'regr', useEOF = 0):
       if useEOF == 0:
         #без использования EOF
         stri = stri + '_useEOF0'
-        model = get_model_nofrozen_classification(n_inputs, len(eofs), True)
+        model = get_model_nofrozen_classification(n_inputs, len(eofs), True, use_batch_norm = False)
         model, hystory = simp_net_classification(tr_t, tr_l, stri, model, v_r)
         
         
       if useEOF == 1:
         #с использованием EOF
         stri = stri + '_useEOF1'
-        model = get_model_frozen_classification(n_inputs, eofs, True)
+        model = get_model_frozen_classification(n_inputs, eofs, True, use_batch_norm = False)
         model, hystory = simp_net_classification(tr_t, tr_l, stri, model, v_r)
         
         
       if useEOF == 2:
         #с использованием примитивов EOF
         stri = stri + '_useEOF2'
-        model = get_model_frozen_classification(n_inputs, eofs, True, True)
+        model = get_model_frozen_classification(n_inputs, eofs, True, True, use_batch_norm = False)
         model, hystory = simp_net_classification(tr_t, tr_l, stri, model, v_r)
         
         
@@ -424,21 +441,21 @@ def train_model(eofs, df, list_t, post_list, li_m, type_m = 'regr', useEOF = 0):
       if useEOF == 0:
         #без использования EOF
         stri = stri + '_useEOF0'
-        model = get_model_nofrozen_regression(n_inputs, n_outputs, True)
+        model = get_model_nofrozen_regression(n_inputs, n_outputs, True, use_batch_norm = False)
         model, hystory = simp_net_regression(tr_t, tr_l, stri, eofs, model, v_r)
 
         
       if useEOF == 1:
         #с использованием EOF
         stri = stri + '_useEOF1'
-        model = get_model_frozen_regression(n_inputs, n_outputs, eofs, True)
+        model = get_model_frozen_regression(n_inputs, n_outputs, eofs, True, use_batch_norm = False)
         model, hystory = simp_net_regression(tr_t, tr_l, stri, eofs, model, v_r)
         
         
       if useEOF == 2:
         #с использованием примитивов EOF
         stri = stri + '_useEOF2'
-        model = get_model_frozen_regression(n_inputs, n_outputs, eofs, True, True)
+        model = get_model_frozen_regression(n_inputs, n_outputs, eofs, True, True, use_batch_norm = False)
         model, hystory = simp_net_regression(tr_t, tr_l, stri, eofs, model, v_r)
         
         

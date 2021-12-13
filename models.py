@@ -1,6 +1,6 @@
 from keras.models import Sequential
 from keras.layers import Dense
-from keras.layers import Dropout
+from keras.layers import Dropout, BatchNormalization
 import numpy as np
 import skimage.measure
 import pandas as pd

@@ -1,3 +1,32 @@
+
+Skip to content
+Pull requests
+Issues
+Marketplace
+Explore
+@Gr1Lo
+Gr1Lo /
+trsgi_nets
+Public
+
+Code
+Issues
+Pull requests
+Actions
+Projects
+Wiki
+Security
+Insights
+
+    Settings
+
+trsgi_nets/train_test_preparing.py /
+@Gr1Lo
+Gr1Lo Update train_test_preparing.py
+Latest commit 9b46a47 15 days ago
+History
+1 contributor
+201 lines (162 sloc) 7.48 KB
 import numpy as np
 from sklearn.preprocessing import normalize
 import pandas as pd
@@ -120,7 +149,7 @@ def augment(pcs_copy1):
   new_df1 = pd.DataFrame(new_df.values*pcs_copy1.values, columns=new_df.columns, index=new_df.index)
   return new_df1
 
-def sta_augment(trsgi_values, pcs):
+def sta_augment(trsgi_values, pcs, n_eof):
   '''
   Искусственное увеличение тренировочной выборки
   '''
@@ -132,7 +161,7 @@ def sta_augment(trsgi_values, pcs):
     n_tab = augment(n_tab)
     pcs_copy = pcs_copy.append(n_tab)
 
-  trsgi_copy= trsgi_values.tolist() * 10
+  trsgi_copy= trsgi_values.tolist() * n_eof
 
   return trsgi_copy, pcs_copy
 
@@ -158,7 +187,7 @@ def sta_split(trsgi_values, pcs_or_kmeans, use_norm = True, type_op = 'regr', us
         train_trsgi, train_labels, test_trsgi, test_labels = train_and_test(trsgi_values, pcs_or_kmeans[:108])
         val_rate = 1
         if use_aug:
-          train_trsgi, train_labels = sta_augment(train_trsgi, train_labels)
+          train_trsgi, train_labels = sta_augment(train_trsgi, train_labels, len(pcs_or_kmeans.columns))
           train_trsgi = np.array(train_trsgi)
           train_labels = np.array(train_labels)
 
@@ -172,8 +201,8 @@ def sta_split(trsgi_values, pcs_or_kmeans, use_norm = True, type_op = 'regr', us
         # разбивка для регрессионной задачи
         train_trsgi, train_labels, val_labels, val_trsgi, test_trsgi, test_labels, val_rate = train_and_test5(trsgi_values, pcs_or_kmeans[:108], use5, type_parts)
         if use_aug:
-          train_trsgi, train_labels = sta_augment(train_trsgi, train_labels)
-          val_trsgi, val_labels = sta_augment(val_trsgi, val_labels)
+          train_trsgi, train_labels = sta_augment(train_trsgi, train_labels, len(pcs_or_kmeans.columns))
+          val_trsgi, val_labels = sta_augment(val_trsgi, val_labels, len(pcs_or_kmeans.columns))
           train_trsgi = np.concatenate((train_trsgi, val_trsgi))
           train_labels = pd.concat([train_labels, val_labels])
         else:
@@ -199,3 +228,4 @@ def filt_arr(type_m, norm, aug, use_01, use_02, eof):
             all_arr.append(m_str)
 
   return all_arr
+

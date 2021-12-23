@@ -468,3 +468,89 @@ def train_model(eofs, df, list_t, post_list, li_m, type_m = 'regr', useEOF = 0, 
                               'test_loss': round(score, 2)}, ignore_index=True)
 
       return df, model
+    
+    
+    
+    
+    
+def train_model_notest(eofs, df, list_t, post_list, li_m, type_m = 'regr', useEOF = 0, use_batch_norm = False):
+    '''
+    Запуск тренировки моделей на наборе без тестовой выборки
+    eofs - набор значений двумерных EOF
+    df - таблица с результатами
+    list_t - список переменных с данными для обучения
+    post_list - список постфиксов имен для переменных
+    li_m - тип сети (регрессия или классификация)
+    useEOF - использование EOF на выходных слоях:
+      0 - не использовать
+      1 - использовать
+      2 - использовать примитивы
+    '''
+
+    if type_m == 'class':
+      tr_t, tr_l, te_t, te_l, v_r = list_t[li_m]
+      n_inputs, n_outputs = tr_t.shape[1], 1
+      stri = post_list[li_m]
+
+      if useEOF == 0:
+        #без использования EOF
+        stri = stri + '_useEOF0'
+        model = get_model_nofrozen_classification(n_inputs, len(eofs), True, use_batch_norm = use_batch_norm)
+        model, hystory = simp_net_classification(tr_t, tr_l, stri, model, v_r)
+        
+        
+      if useEOF == 1:
+        #с использованием EOF
+        stri = stri + '_useEOF1'
+        model = get_model_frozen_classification(n_inputs, eofs, True, use_batch_norm = use_batch_norm)
+        model, hystory = simp_net_classification(tr_t, tr_l, stri, model, v_r)
+        
+        
+      if useEOF == 2:
+        #с использованием примитивов EOF
+        stri = stri + '_useEOF2'
+        model = get_model_frozen_classification(n_inputs, eofs, True, True, use_batch_norm = use_batch_norm)
+        model, hystory = simp_net_classification(tr_t, tr_l, stri, model, v_r)
+        
+      df = df.append({'Name': stri, 
+                                    'params': hystory.params, 
+                                    'loss': round(hystory.history['loss'][-1], 2), 
+                                    'accuracy': round(hystory.history['accuracy'][-1], 2), 
+                                    'val_loss': round(hystory.history['val_loss'][-1], 2), 
+                                    'val_accuracy': round(hystory.history['val_accuracy'][-1], 2)}, ignore_index=True)
+
+      return df, model
+
+
+    else:
+      tr_t, tr_l, te_t, te_l, v_r = list_t[li_m]
+      n_inputs, n_outputs = tr_t.shape[1], 1
+      stri = post_list[li_m]
+
+      if useEOF == 0:
+        #без использования EOF
+        stri = stri + '_useEOF0'
+        model = get_model_nofrozen_regression(n_inputs, n_outputs, True, use_batch_norm = False)
+        model, hystory = simp_net_regression(tr_t, tr_l, stri, eofs, model, v_r)
+
+        
+      if useEOF == 1:
+        #с использованием EOF
+        stri = stri + '_useEOF1'
+        model = get_model_frozen_regression(n_inputs, n_outputs, eofs, True, use_batch_norm = False)
+        model, hystory = simp_net_regression(tr_t, tr_l, stri, eofs, model, v_r)
+        
+        
+      if useEOF == 2:
+        #с использованием примитивов EOF
+        stri = stri + '_useEOF2'
+        model = get_model_frozen_regression(n_inputs, n_outputs, eofs, True, True, use_batch_norm = False)
+        model, hystory = simp_net_regression(tr_t, tr_l, stri, eofs, model, v_r)
+        
+
+      df = df.append({'Name': stri, 
+                              'params': hystory.params, 
+                              'loss': round(hystory.history['loss'][-1], 2),
+                              'val_loss': round(hystory.history['val_loss'][-1], 2)}, ignore_index=True)
+
+      return df, model

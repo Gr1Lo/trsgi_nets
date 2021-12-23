@@ -138,7 +138,7 @@ def sta_augment(trsgi_values, pcs, n_eof):
 
   return trsgi_copy, pcs_copy
 
-def sta_split(trsgi_values, pcs_or_kmeans, use_norm = True, type_op = 'regr', use5 = None, type_parts = 5, use_aug = False):
+def sta_split(trsgi_values, pcs_or_kmeans, use_norm = True, type_op = 'regr', use5 = None, type_parts = 5, use_aug = False, p_v=0.2):
     '''
     Запуск разделения выборки на тренировочную и тестовую
     trsgi_values - набор предикторов, 
@@ -146,7 +146,8 @@ def sta_split(trsgi_values, pcs_or_kmeans, use_norm = True, type_op = 'regr', us
     use_norm - использование нормализации, 
     type_op - тип модели (классификационная или регрессионная), 
     use5 - параметр, отвечающий за разделение набора данных по пятилеткам, 
-    use_aug - параметр, отвечающий за использования синтетического расширения
+    use_aug - параметр, отвечающий за использования синтетического расширения,
+    p_v - доля тестовой выборки
     '''
 
     trsgi_values = np.asarray(trsgi_values)

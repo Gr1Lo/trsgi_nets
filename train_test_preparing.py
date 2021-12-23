@@ -3,16 +3,17 @@ import numpy as np
 from sklearn.preprocessing import normalize
 import pandas as pd
 
-def train_and_test(trsgi, labels):
+def train_and_test(trsgi, labels, p_v):
 
   '''
   Разделение выборки на тренировочную и тестовую (соотношение 4 к 1)
   trsgi - значения предикторов,
-  labels - предсказываемые значения
+  labels - предсказываемые значения,
+  p_v - доля тестовой выборки
   '''
 
   nums = np.ones(len(trsgi))
-  nums[:int(len(trsgi)/5)] = 0
+  nums[:int(len(trsgi)*p_v)] = 0
   np.random.shuffle(nums)
 
   mask = 1 == nums
@@ -156,7 +157,7 @@ def sta_split(trsgi_values, pcs_or_kmeans, use_norm = True, type_op = 'regr', us
     if use5 == None:
       if type_op == 'regr':
         # разбивка для регрессионной задачи
-        train_trsgi, train_labels, test_trsgi, test_labels = train_and_test(trsgi_values, pcs_or_kmeans[:108])
+        train_trsgi, train_labels, test_trsgi, test_labels = train_and_test(trsgi_values, pcs_or_kmeans[:108], p_v)
         val_rate = 1
         if use_aug:
           train_trsgi, train_labels = sta_augment(train_trsgi, train_labels, len(pcs_or_kmeans.columns))
@@ -165,7 +166,7 @@ def sta_split(trsgi_values, pcs_or_kmeans, use_norm = True, type_op = 'regr', us
 
       if type_op == 'class':
         # разбивка для классификационной задачи
-        train_trsgi, train_labels, test_trsgi, test_labels = train_and_test(trsgi_values, pcs_or_kmeans.labels_[:108])
+        train_trsgi, train_labels, test_trsgi, test_labels = train_and_test(trsgi_values, pcs_or_kmeans.labels_[:108], p_v)
         val_rate = 1
 
     else:

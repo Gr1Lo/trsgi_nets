@@ -176,3 +176,77 @@ def corr_coef_pixel(str_lat,
       print('Коэффициент корреляции Спирмана (для ненормального распределения) = ' + str(corr_s[0]) + ', p-value = ' + str(corr_s[1]))
 
     return corr, corr_s
+
+  
+  
+  def corr_coef_pixel_all_years(
+                     df_data = None, 
+                     ds_n = None, 
+                     pca = None,
+                     pcs = None, 
+                     eofs = None, 
+                     eigvals = None,
+                     scale_type = 2):
+    '''
+    Вывод карты с коэффициентами корреляции по всем пикселям за все годы:
+    df_data - исходные данные по PDSI, 
+    ds_n - трехмерный массив, используется для извлечения параметров исходных данных, 
+    pca - объект, полученный в результате eof_an,
+    pcs - предсказанные моделью значения компонент, 
+    eofs - набор значений функций EOF, 
+    eigvals - собственные числа EOF,
+    scale_type - параметр отвечающий за масштабирование главных компонент и 
+                  EOF через умножение/деление значений на собственные числа,
+    '''
+  
+    if scale_type == 2:
+      eofs = eofs[0:len(eofs)] / np.sqrt(eigvals[0:len(eofs)])[:, np.newaxis]
+      if type(pcs).__module__ != np.__name__:
+        pcs = pcs.to_numpy()[:, 0:len(eofs)] / np.sqrt(eigvals[0:len(eofs)])
+      else:
+        pcs = pcs[:, 0:len(eofs)] / np.sqrt(eigvals[0:len(eofs)])
+
+    if scale_type == 1:
+      eofs = eofs[0:len(eofs)] * np.sqrt(eigvals[0:len(eofs)])[:, np.newaxis]
+      if type(pcs).__module__ != np.__name__:
+        pcs = pcs.to_numpy()[:, 0:len(eofs)] * np.sqrt(eigvals[0:len(eofs)])
+      else:
+        pcs = pcs[:, 0:len(eofs)] * np.sqrt(eigvals[0:len(eofs)])
+
+    Yhat = np.dot(pcs, eofs.to_numpy())
+    Yhat = pca._scaler.inverse_transform(Yhat)
+
+    if type(df_data).__module__ != np.__name__:
+      l_ar = len(df_data.to_numpy()[0])
+    else:
+      l_ar = len(df_data[:,m_ind][0])
+    
+
+    corr_s_l = []
+    for m_ind in range(l_ar):
+      if type(df_data).__module__ != np.__name__:
+        u0 = df_data.to_numpy()[:,m_ind]
+      else:
+        u0 = df_data[:,m_ind]
+      
+      if np.isnan(u0[0]):
+        corr_s = np.nan
+      else:
+        u = Yhat[:,m_ind]
+        u0 = u0[:len(u)]
+        nas = np.logical_or(np.isnan(u), np.isnan(u0))
+        corr_s = spearmanr(u0[~nas],u[~nas])[0]
+      
+      corr_s_l.append(corr_s)
+
+    new = np.reshape(corr_s_l, (-1, ds_n.shape[2]))
+    im = plt.imshow(new[::-1], interpolation='none',cmap='coolwarm')
+    cbar = plt.colorbar(im, ticks=[-1, -0.5, -0.25, 0, 0.25, 0.5, 1], 
+                        orientation='vertical',
+                        fraction=0.045, pad=0.05)
+    plt.title('Коэффициент корреляции по всем годам')
+    plt.axis('off')
+    plt.tight_layout()
+    plt.show()
+
+    return new

@@ -179,7 +179,7 @@ def corr_coef_pixel(str_lat,
 
   
   
-  def corr_coef_pixel_all_years(
+def corr_coef_pixel_all_years(
                      df_data = None, 
                      ds_n = None, 
                      pca = None,

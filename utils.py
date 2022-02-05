@@ -256,6 +256,70 @@ def class_graph_check(year, base_year = 1901, df_data = None, ds_n = None, pcs =
     ax = fig.add_subplot()
     eof_i.plot(ax=ax,vmin=-0.75, vmax=0.75, cmap="RdBu_r",cbar_kwargs={'label': ""})
     ax.set_title('Класс (EOF=' + str(eof_in) + '), год: ' + str(base_year+year))
+
+def computed_scpdsi_graph_check(year, 
+                     base_year = 1901, 
+                     df_data = None, 
+                     ds_n = None,
+                     computed_df_data = None,
+                     computed_ds_n = None):
+    '''
+    Функция сравнения реальных и рассчитанных значений PDSI для регрессии:
+    year - индекс года в наборе данных, 
+    base_year - год отсчета (нужен для перевод индекса в реальный год), 
+    df_data - исходные данные по PDSI, 
+    ds_n - трехмерный массив, используется для извлечения параметров исходных данных, 
+    computed_df_data - рассчитанные PDSI, 
+    computed_ds_n - трехмерный массив, используется для извлечения параметров исходных данных,
+    
+    '''
+
+    if type(df_data).__module__ != np.__name__:
+      u = df_data.to_numpy()[year]
+    else:
+      u = df_data[year]
+     
+    
+    new = np.reshape(u, (ds_n.shape[1], ds_n.shape[2]))
+    im = plt.imshow(new[::-1], interpolation='none')
+
+    cbar = plt.colorbar(im, ticks=[-4, -3, -2, -1, 0, 1, 2, 3, 4], 
+                        orientation='vertical',
+                        fraction=0.045, pad=0.05)
+    plt.title('Реальные scPDSI, год: ' + str(year + base_year))
+    plt.axis('off')
+    plt.tight_layout()
+    plt.show()
+
+    if type(computed_df_data).__module__ != np.__name__:
+      computed_u = computed_df_data.to_numpy()[year]
+    else:
+      computed_u = computed_df_data[year]
+     
+    
+    computed_new = np.reshape(computed_u, (computed_ds_n.shape[2], computed_ds_n.shape[1]))
+    computed_im = plt.imshow(np.transpose(np.flip(computed_new[::-1])), interpolation='none')
+
+    computed_cbar = plt.colorbar(computed_im, ticks=[-4, -3, -2, -1, 0, 1, 2, 3, 4], 
+                        orientation='vertical',
+                        fraction=0.045, pad=0.05)
+    plt.title('Рассчитанные scPDSI, год: ' + str(year + base_year))
+    plt.axis('off')
+    plt.tight_layout()
+    plt.show()
+
+
+
+    new = new[::-1] - np.transpose(np.flip(computed_new[::-1]))
+    im = plt.imshow(new, interpolation='none')
+
+    cbar = plt.colorbar(im, ticks=[-4, -3, -2, -1, 0, 1, 2, 3, 4], 
+                        orientation='vertical',
+                        fraction=0.045, pad=0.05)
+    plt.title('Разница scPDSI, год: ' + str(year + base_year))
+    plt.axis('off')
+    plt.tight_layout()
+    plt.show()
     
 def diff(row, name_c):
   #Расчет полей с разницей метрик модели

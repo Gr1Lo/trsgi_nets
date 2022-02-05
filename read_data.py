@@ -34,22 +34,31 @@ def r_netCDF(f_path, min_lon = -145, min_lat = 14, max_lon = -52, max_lat = 71):
 
     ds = xr.open_dataset(f_path)["scpdsi"]
 
+    coor = [] 
+    for key in ds.coords.keys():
+      coor.append(key)
+
     #Выбор территории анализа
-    mask_lon = (ds.longitude >= min_lon) & (ds.longitude <= max_lon)
-    mask_lat = (ds.latitude >= min_lat) & (ds.latitude <= max_lat)
+    if coor[1] == 'latitude':
+      mask_lon = (ds.longitude >= min_lon) & (ds.longitude <= max_lon)
+      mask_lat = (ds.latitude >= min_lat) & (ds.latitude <= max_lat)
+    else:
+      mask_lon = (ds.lon >= min_lon) & (ds.lon <= max_lon)
+      mask_lat = (ds.lat >= min_lat) & (ds.lat <= max_lat)
+
     ds_n = ds.where(mask_lon & mask_lat, drop=True)
     df_nn = ds_n.to_dataframe().reset_index()
 
     #Используется информация только по летним месяцам
     df_nn0 = df_nn[(df_nn['time'].dt.month < 9)&(df_nn['time'].dt.month > 5)]
-    grouped_df = df_nn0.groupby(["latitude", "longitude" ,df_nn0['time'].dt.year])
+    grouped_df = df_nn0.groupby([coor[1], coor[0] ,df_nn0['time'].dt.year])
     mean_df = grouped_df.mean()
     mean_df = mean_df.reset_index()
 
     mean_df['time_n'] = pd.to_datetime(mean_df.time.astype(str), format='%Y')
     del mean_df['time']
     mean_df = mean_df.rename(columns={'time_n': 'time'})
-    mean_df = mean_df[['time', 'latitude', 'longitude', 'scpdsi']]
-    df_data = get_time_space(mean_df, time_dim = "time", lumped_space_dims = ["latitude","longitude"])
+    mean_df = mean_df[['time', coor[1], coor[0], 'scpdsi']]
+    df_data = get_time_space(mean_df, time_dim = "time", lumped_space_dims = [coor[1],coor[0]])
 
     return df_data, ds_n

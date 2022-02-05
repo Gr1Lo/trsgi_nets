@@ -198,6 +198,7 @@ def regr_graph_check(year,
   if type_f in ('Both'):
 
     Yhat = np.dot(pcs, eofs.to_numpy())
+    Yhat = pca._scaler.inverse_transform(Yhat)
 
     if type(df_data).__module__ != np.__name__:
       u = df_data.to_numpy()[year]

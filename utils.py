@@ -291,6 +291,7 @@ def computed_scpdsi_graph_check(year,
       plt.title('Реальные scPDSI, год: ' + str(year + base_year))
       plt.axis('off')
       plt.tight_layout()
+      plt.clim(-4, 4)
       plt.show()
 
     if type(computed_df_data).__module__ != np.__name__:
@@ -309,10 +310,11 @@ def computed_scpdsi_graph_check(year,
       plt.title('Рассчитанные scPDSI, год: ' + str(year + base_year))
       plt.axis('off')
       plt.tight_layout()
+      plt.clim(-4, 4)
       plt.show()
 
     new = new[::-1] - np.transpose(np.flip(computed_new[::-1]))
-    im = plt.imshow(new, interpolation='none')
+    im = plt.imshow(new, interpolation='none', cmap='gist_earth')
 
     cbar = plt.colorbar(im, ticks=[-4, -3, -2, -1, 0, 1, 2, 3, 4], 
                         orientation='vertical',
@@ -320,6 +322,7 @@ def computed_scpdsi_graph_check(year,
     plt.title('Разница scPDSI, год: ' + str(year + base_year))
     plt.axis('off')
     plt.tight_layout()
+    plt.clim(-4, 4)
     plt.show()
     
 def diff(row, name_c):

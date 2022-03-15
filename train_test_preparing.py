@@ -158,7 +158,7 @@ def sta_split(trsgi_values, pcs_or_kmeans, use_norm = True, type_op = 'regr', us
     if use5 == None:
       if type_op == 'regr':
         # разбивка для регрессионной задачи
-        train_trsgi, train_labels, test_trsgi, test_labels = train_and_test(trsgi_values, pcs_or_kmeans[:108], p_v)
+        train_trsgi, train_labels, test_trsgi, test_labels = train_and_test(trsgi_values, pcs_or_kmeans[:106], p_v)
         val_rate = 1
         if use_aug:
           train_trsgi, train_labels = sta_augment(train_trsgi, train_labels, len(pcs_or_kmeans.columns))
@@ -167,13 +167,13 @@ def sta_split(trsgi_values, pcs_or_kmeans, use_norm = True, type_op = 'regr', us
 
       if type_op == 'class':
         # разбивка для классификационной задачи
-        train_trsgi, train_labels, test_trsgi, test_labels = train_and_test(trsgi_values, pcs_or_kmeans.labels_[:108], p_v)
+        train_trsgi, train_labels, test_trsgi, test_labels = train_and_test(trsgi_values, pcs_or_kmeans.labels_[:106], p_v)
         val_rate = 1
 
     else:
       if type_op == 'regr':
         # разбивка для регрессионной задачи
-        train_trsgi, train_labels, val_labels, val_trsgi, test_trsgi, test_labels, val_rate = train_and_test5(trsgi_values, pcs_or_kmeans[:108], use5, type_parts)
+        train_trsgi, train_labels, val_labels, val_trsgi, test_trsgi, test_labels, val_rate = train_and_test5(trsgi_values, pcs_or_kmeans[:106], use5, type_parts)
         if use_aug:
           train_trsgi, train_labels = sta_augment(train_trsgi, train_labels, len(pcs_or_kmeans.columns))
           val_trsgi, val_labels = sta_augment(val_trsgi, val_labels, len(pcs_or_kmeans.columns))
@@ -185,7 +185,7 @@ def sta_split(trsgi_values, pcs_or_kmeans, use_norm = True, type_op = 'regr', us
 
       if type_op == 'class':
         # разбивка для классификационной задачи
-        train_trsgi, train_labels, val_labels, val_trsgi, test_trsgi, test_labels, val_rate = train_and_test5(trsgi_values, pcs_or_kmeans.labels_[:108], use5, type_parts)
+        train_trsgi, train_labels, val_labels, val_trsgi, test_trsgi, test_labels, val_rate = train_and_test5(trsgi_values, pcs_or_kmeans.labels_[:106], use5, type_parts)
         train_trsgi = np.concatenate((train_trsgi, val_trsgi))
         train_labels = np.concatenate((train_labels, val_labels))
 

@@ -2,11 +2,14 @@ import pandas as pd
 import numpy as np
 import xarray as xr
 from pyEOF import *
+from sklearn import linear_model
 
-def r_execel(f_path):
+def r_execel(f_path, drop_val = 2):
     '''
     Формирование двумерного массива по годам из данных,
     полученных из ДКХ
+    f_path - путь до xlsx файла
+    drop_val - число строчек, которые будут удалены с конца табилцы
     '''
     df = pd.read_excel(f_path, index_col=None)
     fn_list = df['file_name'].unique()
@@ -21,11 +24,34 @@ def r_execel(f_path):
         if len(re)>0:
           one_year_arr.append(re[0])
         else:
-          one_year_arr.append(0.)
+          one_year_arr.append(None)
 
       trsgi_values.append(one_year_arr)
 
-    return trsgi_values
+    df_trsgi_values = pd.DataFrame(data=trsgi_values)
+    ind_list = []
+    for index, val in df_trsgi_values.isna().sum().iteritems():
+      if val < drop_val+1:
+        ind_list.append(index)
+
+    df_trsgi_values.drop(df_trsgi_values.tail(drop_val).index,inplace=True)
+    arrX = df_trsgi_values[ind_list].to_numpy()
+
+    m_list = []
+    for i in range(len(df_trsgi_values[0])):
+      arrY = df_trsgi_values[i].to_numpy()
+      ind_NONE = np.where(np.isnan(arrY))
+      ind_not_NONE = np.where(~np.isnan(arrY))
+
+      regr = linear_model.LinearRegression()
+      regr.fit(arrX[ind_not_NONE], arrY[ind_not_NONE])
+      arrY[ind_NONE] = np.around(regr.predict(arrX[ind_NONE]),3)
+      m_list.append(arrY)
+
+    mat = np.array(m_list)
+    res = np.transpose(mat)
+
+    return res
 
 def r_netCDF(f_path, min_lon = -145, min_lat = 14, max_lon = -52, max_lat = 71):
     '''

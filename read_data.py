@@ -23,8 +23,10 @@ def r_execel(f_path, drop_val = 2):
         re = df0[df0['file_name'] == j]['trsgi'].values
         if len(re)>0:
           one_year_arr.append(re[0])
+          #print(len(one_year_arr))
         else:
           one_year_arr.append(None)
+          #print(len(one_year_arr))
 
       trsgi_values.append(one_year_arr)
 
@@ -38,14 +40,15 @@ def r_execel(f_path, drop_val = 2):
     arrX = df_trsgi_values[ind_list].to_numpy()
 
     m_list = []
-    for i in range(len(df_trsgi_values[0])):
+    for i in range(len(df_trsgi_values.columns)):
       arrY = df_trsgi_values[i].to_numpy()
       ind_NONE = np.where(np.isnan(arrY))
       ind_not_NONE = np.where(~np.isnan(arrY))
 
       regr = linear_model.LinearRegression()
       regr.fit(arrX[ind_not_NONE], arrY[ind_not_NONE])
-      arrY[ind_NONE] = np.around(regr.predict(arrX[ind_NONE]),3)
+      if len(ind_NONE[0])>0:
+        arrY[ind_NONE] = np.around(regr.predict(arrX[ind_NONE]),3)
       m_list.append(arrY)
 
     mat = np.array(m_list)

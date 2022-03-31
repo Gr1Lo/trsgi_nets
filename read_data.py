@@ -87,11 +87,12 @@ def r_netCDF(f_path, min_lon = -145, min_lat = 14, max_lon = -52, max_lat = 71, 
     mean_df['time_n'] = pd.to_datetime(mean_df.time.astype(str), format='%Y')
     del mean_df['time']
     mean_df = mean_df.rename(columns={'time_n': 'time'})
-    mean_df = mean_df[['time', coor[1], coor[0], 'scpdsi']]
 
     if swap == 0:
+      mean_df = mean_df[['time', coor[1], coor[0], 'scpdsi']]
       df_data = get_time_space(mean_df, time_dim = "time", lumped_space_dims = [coor[1],coor[0]])
     else:
+      mean_df = mean_df[['time', coor[0], coor[1], 'scpdsi']]
       df_data = get_time_space(mean_df, time_dim = "time", lumped_space_dims = [coor[0],coor[1]])
 
     return df_data, ds_n

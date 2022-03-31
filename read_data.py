@@ -56,7 +56,7 @@ def r_execel(f_path, drop_val = 2):
 
     return res
 
-def r_netCDF(f_path, min_lon = -145, min_lat = 14, max_lon = -52, max_lat = 71):
+def r_netCDF(f_path, min_lon = -145, min_lat = 14, max_lon = -52, max_lat = 71, swap = 0):
     '''
     Формирование таблицы по годам из netCDF с индексами scpdsi
     '''
@@ -88,6 +88,10 @@ def r_netCDF(f_path, min_lon = -145, min_lat = 14, max_lon = -52, max_lat = 71):
     del mean_df['time']
     mean_df = mean_df.rename(columns={'time_n': 'time'})
     mean_df = mean_df[['time', coor[1], coor[0], 'scpdsi']]
-    df_data = get_time_space(mean_df, time_dim = "time", lumped_space_dims = [coor[1],coor[0]])
+
+    if swap == 0:
+      df_data = get_time_space(mean_df, time_dim = "time", lumped_space_dims = [coor[1],coor[0]])
+    else:
+      df_data = get_time_space(mean_df, time_dim = "time", lumped_space_dims = [coor[0],coor[1]])
 
     return df_data, ds_n
